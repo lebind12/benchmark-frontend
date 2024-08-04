@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Logo from '@/public/kopnya.png';
+import Chzzk from '@/public/치지직_02.png';
 import {
   Navbar,
   NavbarBrand,
@@ -59,10 +60,23 @@ const NavigationBar = () => {
           </Link>
         </NavbarItem>
       </NavbarContent>
-      <NavbarContent
-        className="hidden sm:flex gap-4"
-        justify="end"
-      ></NavbarContent>
+      <NavbarContent className="hidden sm:flex gap-4" justify="end">
+        <NavbarItem>
+          <Link href="https://chzzk.naver.com/eaf7b569c9992d0e57db0059eb5c0eeb">
+            <Image src={Chzzk} alt="치지직 연결" width={32}></Image>
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link href="https://chzzk.naver.com/eaf7b569c9992d0e57db0059eb5c0eeb">
+            <Image src={Chzzk} alt="치지직 연결" width={32}></Image>
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link href="https://chzzk.naver.com/eaf7b569c9992d0e57db0059eb5c0eeb">
+            <Image src={Chzzk} alt="치지직 연결" width={32}></Image>
+          </Link>
+        </NavbarItem>
+      </NavbarContent>
     </Navbar>
   );
 };

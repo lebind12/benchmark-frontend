@@ -4,10 +4,12 @@ import TeamNameComponent from './TeamNameComponent';
 
 const TeamVersusComponent = () => {
   return (
-    <div className="flex flex-col w-full h-full bg-slate-600 rounded-xl">
+    <div className="flex flex-col w-full h-full p-2 bg-slate-600 rounded-xl">
       <div className="flex w-full justify-evenly items-center">
         <TeamNameComponent />
-        <span className="text-[60px] font-['MangoDdobak-B']">VS</span>
+        <span className="grid items-center  text-[60px] font-['MangoDdobak-B']">
+          VS
+        </span>
         <TeamNameComponent />
       </div>
       <div className="flex flex-col w-full justify-center">
