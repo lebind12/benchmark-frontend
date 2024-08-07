@@ -5,8 +5,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getDateString(input: Date) {
+export function getDateString(input: Date | undefined) {
   console.log(input);
+  if (typeof input == 'undefined') input = new Date();
 
   let yearString = input.getFullYear().toString();
   let monthString = '0' + (input.getMonth() + 1).toString();

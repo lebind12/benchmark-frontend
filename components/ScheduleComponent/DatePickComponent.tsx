@@ -27,9 +27,11 @@ export default function DatePickPage({
   // );
   const [date, setDate] = useState<Date>(new Date());
   const router = useRouter();
-  const CalendarSelect = (date: Date) => {
+  const CalendarSelect = (date: Date | undefined) => {
+    if (typeof date === 'undefined') return;
     setDate(date);
-    router.push('/' + league + '/' + getDateString(date));
+    if (league === '') router.push('/premier/' + getDateString(date));
+    else router.push('/' + league + '/' + getDateString(date));
   };
 
   return (
