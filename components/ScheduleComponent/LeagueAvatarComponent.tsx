@@ -6,9 +6,10 @@ type TeamNameComponentProps = {
   color: string;
 };
 
-const LeagueAvartaComponent = ({
+const LeagueAvatarComponent = ({
   src = 'https://media.api-sports.io/football/teams/33.png',
   name = 'TEST',
+  isSelected = false,
 }) => {
   return (
     <div className="flex flex-col justify-center items-center w-full h-full">
@@ -16,7 +17,7 @@ const LeagueAvartaComponent = ({
         src={src}
         name="??"
         isBordered
-        color="primary"
+        color={isSelected ? 'success' : 'default'}
         className="w-20 h-20 text-large mb-2"
       ></Avatar>
       <span>{name}</span>
@@ -24,4 +25,4 @@ const LeagueAvartaComponent = ({
   );
 };
 
-export default LeagueAvartaComponent;
+export default LeagueAvatarComponent;
