@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className="h-lvh min-h-lvh w-screen overflow-x-hidden overflow-y-auto bg-background">
         <NextUIProvider>
           <NavigationBar />
-          <main className="flex h-lvh min-h-lvh w-full">
+          <main className="flex h-lvh min-h-lvh w-full bg-background">
             <LeftSideNavigation />
             <div className="flex flex-col h-full w-full">{children}</div>
             <RightSideNavigation />

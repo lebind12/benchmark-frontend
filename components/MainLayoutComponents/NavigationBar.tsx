@@ -45,12 +45,12 @@ const NavigationBar = () => {
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="/statistics">
+          <Link color="foreground" href="/playerstat">
             선수 정보
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="/statistics">
+          <Link color="foreground" href="/teamstat">
             팀 정보
           </Link>
         </NavbarItem>
