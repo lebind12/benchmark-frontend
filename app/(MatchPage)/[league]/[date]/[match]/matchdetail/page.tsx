@@ -9,6 +9,7 @@ import ScoreBoardComponent from '@/components/MatchDetailComponents/ScoreBoardCo
 import TimeLineComponent from '@/components/MatchDetailComponents/TimelineComponent';
 import FormationComponent from '@/components/MatchDetailComponents/FormationComponent';
 import MatchStatisticsComponent from '@/components/MatchDetailComponents/MatchStatisticsComponent';
+import LineupComponent from '@/components/MatchDetailComponents/LineupComponent';
 
 export default function Home({
   params,
@@ -37,16 +38,16 @@ export default function Home({
         <div className="w-full h-fit">
           <TimeLineComponent></TimeLineComponent>
         </div>
-        <div className="w-full h-full bg-black">
+        <div className="w-full h-full">
           <MatchStatisticsComponent></MatchStatisticsComponent>
         </div>
       </div>
       <div className="flex flex-col w-3/5 h-full gap-4">
-        <div className="w-full h-fit bg-white">
+        <div className="w-full h-fit">
           <FormationComponent></FormationComponent>
         </div>
-        <div className="w-full h-full bg-black">
-          <FormationComponent></FormationComponent>
+        <div className="w-full h-full">
+          <LineupComponent></LineupComponent>
         </div>
       </div>
     </div>
