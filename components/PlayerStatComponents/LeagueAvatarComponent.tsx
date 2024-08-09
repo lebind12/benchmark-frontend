@@ -2,7 +2,6 @@ import { Avatar } from '@nextui-org/avatar';
 
 const LeagueAvatarComponent = ({
   src = 'https://media.api-sports.io/football/teams/33.png',
-  name = 'TEST',
   isSelected = false,
 }) => {
   return (
@@ -12,9 +11,8 @@ const LeagueAvatarComponent = ({
         name="??"
         isBordered
         color={isSelected ? 'success' : 'default'}
-        className="w-20 h-20 text-large mb-2"
+        className="w-6 h-6 mb-2"
       ></Avatar>
-      <span>{name}</span>
     </div>
   );
 };
