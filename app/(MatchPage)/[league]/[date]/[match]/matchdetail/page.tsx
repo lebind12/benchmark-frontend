@@ -5,6 +5,10 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 import { useState } from 'react';
 import FootballField from '@/public/footballfield.jpeg';
+import ScoreBoardComponent from '@/components/MatchDetailComponents/ScoreBoardComponent';
+import TimeLineComponent from '@/components/MatchDetailComponents/TimelineComponent';
+import FormationComponent from '@/components/MatchDetailComponents/FormationComponent';
+import MatchStatisticsComponent from '@/components/MatchDetailComponents/MatchStatisticsComponent';
 
 export default function Home({
   params,
@@ -15,30 +19,35 @@ export default function Home({
     match: string;
   };
 }) {
+  // TODO
+  // 경기 스코어 표시
+  // 현재 선수 카드 정보
+  // 경기 시간 표시
+  // 타임라인
+  // 경기 통계
+
   const [HomeTeam, setHomeTeam] = useState(params.match.split('-')[0]);
   const [AwayTeam, setAwayTeam] = useState(params.match.split('-')[1]);
   return (
-    <div className="h-full w-full mt-4">
-      <div className="flex flex-col w-full h-full gap-4">
-        <div className="flex w-full justify-center items-center">
-          <div className="w-full justify-center">
-            <TeamAvatarComponent name={HomeTeam}></TeamAvatarComponent>
-          </div>
-          <div className="w-full justify-center">
-            <span className="grid justify-center text-2xl">VS</span>
-          </div>
-          <div className="w-full justify-center">
-            <TeamAvatarComponent name={AwayTeam}></TeamAvatarComponent>
-          </div>
+    <div className="flex h-full w-full mt-4 gap-4">
+      <div className="flex flex-col w-2/5 h-full gap-4">
+        <div className="w-full h-fit">
+          <ScoreBoardComponent></ScoreBoardComponent>
         </div>
-        <div className="w-full text-2xl text-center">
-          <div>00:00</div>
-          <div>에미레이츠 스타디움</div>
+        <div className="w-full h-fit">
+          <TimeLineComponent></TimeLineComponent>
         </div>
-        <div className="flex flex-none w-full justify-center">
-          <Image src={FootballField} alt={'경기장'} />
+        <div className="w-full h-full bg-black">
+          <MatchStatisticsComponent></MatchStatisticsComponent>
         </div>
-        <div>라인업</div>
+      </div>
+      <div className="flex flex-col w-3/5 h-full gap-4">
+        <div className="w-full h-fit bg-white">
+          <FormationComponent></FormationComponent>
+        </div>
+        <div className="w-full h-full bg-black">
+          <FormationComponent></FormationComponent>
+        </div>
       </div>
     </div>
   );

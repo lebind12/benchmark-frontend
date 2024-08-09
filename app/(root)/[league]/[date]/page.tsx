@@ -13,12 +13,30 @@ export default function Page({
         dateString={params.date}
       ></DatePickPage>
       <div className="grid grid-cols-4 gap-4">
-        <TeamVersusComponent></TeamVersusComponent>
-        <TeamVersusComponent></TeamVersusComponent>
-        <TeamVersusComponent></TeamVersusComponent>
-        <TeamVersusComponent></TeamVersusComponent>
-        <TeamVersusComponent></TeamVersusComponent>
-        <TeamVersusComponent></TeamVersusComponent>
+        <TeamVersusComponent
+          League={params.league}
+          Date={params.date}
+        ></TeamVersusComponent>
+        <TeamVersusComponent
+          League={params.league}
+          Date={params.date}
+        ></TeamVersusComponent>
+        <TeamVersusComponent
+          League={params.league}
+          Date={params.date}
+        ></TeamVersusComponent>
+        <TeamVersusComponent
+          League={params.league}
+          Date={params.date}
+        ></TeamVersusComponent>
+        <TeamVersusComponent
+          League={params.league}
+          Date={params.date}
+        ></TeamVersusComponent>
+        <TeamVersusComponent
+          League={params.league}
+          Date={params.date}
+        ></TeamVersusComponent>
       </div>
     </div>
   );
