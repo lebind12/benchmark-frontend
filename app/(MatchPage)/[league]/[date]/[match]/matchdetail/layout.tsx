@@ -16,6 +16,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <NavbarBrand>
           <p className="text-2xl font-['ONE-Mobile-POP']">매치 디테일</p>
         </NavbarBrand>
+        <NavbarContent justify="end">
+          <Link href="/stream">스트리밍</Link>
+        </NavbarContent>
       </Navbar>
       <div className="w-full h-full">{children}</div>
     </>

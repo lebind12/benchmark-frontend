@@ -1,3 +1,7 @@
+import MatchHeadComponent from '@/components/TeamStatComponents/MatchHeadComponent';
+import TeamRankComponent from '@/components/TeamStatComponents/TeamRankComponent';
+import TeamSquadComponent from '@/components/TeamStatComponents/TeamSquadComponent';
+import TeamStatisticsComponent from '@/components/TeamStatComponents/TeamStatisticsComponent';
 import { Metadata } from 'next';
 import Image from 'next/image';
 
@@ -11,8 +15,19 @@ export default function Home() {
   // 스쿼드
 
   return (
-    <div className="h-full w-full text-6xl">
-      팀 정보 검색 기능은 준비중입니다.
+    <div className="flex flex-col h-full w-full gap-4">
+      <div className="w-full h-fit mt-4">
+        <MatchHeadComponent></MatchHeadComponent>
+      </div>
+      <div className="flex w-full h-fit gap-4">
+        <div className="w-2/5 h-full">
+          <TeamSquadComponent></TeamSquadComponent>
+        </div>
+        <div className="flex flex-col w-3/5 h-full gap-4">
+          <TeamRankComponent></TeamRankComponent>
+        </div>
+      </div>
+      <TeamStatisticsComponent></TeamStatisticsComponent>
     </div>
   );
 }
