@@ -9,7 +9,17 @@ import {
 } from '@nextui-org/react';
 import '@/styles/fonts.css';
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = ({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: {
+    league: string;
+    date: string;
+    match: string;
+  };
+}) => {
   return (
     <>
       <Navbar isBordered>
@@ -17,7 +27,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <p className="text-2xl font-['ONE-Mobile-POP']">매치 디테일</p>
         </NavbarBrand>
         <NavbarContent justify="end">
-          <Link href="/stream">스트리밍</Link>
+          <Link href={'/stream/' + params.league + '/' + params.match}>
+            스트리밍
+          </Link>
         </NavbarContent>
       </Navbar>
       <div className="w-full h-full">{children}</div>

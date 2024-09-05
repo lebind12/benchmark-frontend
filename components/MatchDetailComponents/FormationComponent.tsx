@@ -1,7 +1,12 @@
 import Field from '@/public/footballfield.jpeg';
 import Image from 'next/image';
 
-const FormationComponent = () => {
+type FormationComponentProps = {
+  HomeId: number;
+  AwayId: number;
+};
+
+const FormationComponent = ({}: FormationComponentProps) => {
   return (
     <div className="flex flex-col w-full h-full rounded-lg bg-primary-50 gap-2 p-4">
       <div className="w-full text-xl font-['ONE-Mobile-POP']">

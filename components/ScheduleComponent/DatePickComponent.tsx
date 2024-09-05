@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 
 export default function DatePickPage({
   league = 'premier',
-  dateString = getDateString(new Date()),
+  dateString,
 }: {
   league: string;
   dateString: string;
@@ -25,11 +25,9 @@ export default function DatePickPage({
   // const [selectDay, setSelectDay] = useState<string>(
   //   getDateString(new Date(Date.now())),
   // );
-  const [date, setDate] = useState<Date>(new Date());
   const router = useRouter();
   const CalendarSelect = (date: Date | undefined) => {
     if (typeof date === 'undefined') return;
-    setDate(date);
     if (league === '') router.push('/premier/' + getDateString(date));
     else router.push('/' + league + '/' + getDateString(date));
   };
@@ -55,7 +53,7 @@ export default function DatePickPage({
           <PopoverContent className="w-auto p-0">
             <Calendar
               mode="single"
-              selected={date}
+              selected={new Date(dateString + 'T00:00:00')}
               onSelect={CalendarSelect}
               initialFocus
             />

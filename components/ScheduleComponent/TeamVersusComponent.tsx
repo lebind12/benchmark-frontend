@@ -11,16 +11,18 @@ type TeamVersusComponentType = {
   HomeId: string;
   AwayId: string;
   venue: string;
+  fixtureId: string;
 };
 
 const TeamVersusComponent = ({
-  HomeTeam = 'ManUtd',
-  AwayTeam = 'ManCity',
-  League = 'premier',
-  Date = '2020',
+  HomeTeam,
+  AwayTeam,
+  League,
+  Date,
   HomeId,
   AwayId,
   venue,
+  fixtureId,
 }: TeamVersusComponentType) => {
   return (
     <Link
@@ -28,11 +30,9 @@ const TeamVersusComponent = ({
         '/' +
         League +
         '/' +
-        Date +
+        Date.split('T')[0] +
         '/' +
-        HomeTeam +
-        '-' +
-        AwayTeam +
+        fixtureId +
         '/matchdetail'
       }
     >
@@ -45,7 +45,9 @@ const TeamVersusComponent = ({
           <TeamNameComponent name={AwayTeam} team_id={AwayId} />
         </div>
         <div className="flex flex-col w-full justify-center">
-          <span className="grid justify-center">시간: {Date.slice(0, 5)}</span>
+          <span className="grid justify-center">
+            시간: {Date.split('T')[1].slice(0, 5)}
+          </span>
           <span className="grid justify-center">장소: {venue}</span>
         </div>
       </div>

@@ -1,130 +1,282 @@
 'use client';
-import { Separator } from '@/components/ui/separator';
-import Field from '@/public/assets/FieldBoard.png';
-import KopImage from '@/public/assets/eaglekop.png';
-import Image from 'next/image';
+import CommentComponent from '@/components/StreamComponents/CommentComponent';
+import FixtureStatisticsComponent from '@/components/StreamComponents/FixtureStatisticsComponent';
+import FormationComponent from '@/components/StreamComponents/FormationComponent';
+import PlayerStatisticsComponent from '@/components/StreamComponents/PlayerStatisticsComponent';
+import PopupComponent from '@/components/StreamComponents/PopupComponent';
+import ScoreBoardComponent from '@/components/StreamComponents/ScoreBoardComponent';
+import useInterval from '@/hooks/intervalHook';
+import axios from 'axios';
+import { useEffect, useRef, useState } from 'react';
 
-export default function Home() {
+type fixtureDataType = {
+  fixture_id: 1208021;
+  id: 1;
+  eng_homename: 'Manchester United';
+  kor_homename: '맨체스터 유나이티드';
+  home_id: 33;
+  status: 'Not Started';
+  league_id: 39;
+  venue: 'Old Trafford';
+  roundname: 'Regular Season - 1';
+  date: '2024-08-17T04:00:00';
+  eng_awayname: 'Fulham';
+  kor_awayname: '풀럼';
+  away_id: 36;
+  league_name: 'Premier League';
+};
+
+type korLineupType = {
+  [key: number]: string;
+};
+
+type lineupData = {
+  [key: number]: lineupPlayerData[];
+};
+
+type lineupPlayerData = {
+  id: number;
+  name: string;
+  jerseyNumber: number;
+  goalCount: number;
+  isWarned: boolean;
+  isBanned: boolean;
+  substitution: boolean;
+  position: string;
+};
+
+export default function Home({
+  params,
+}: {
+  params: { league_id: string; fixture: string };
+}) {
+  const [fixtureData, setFixtureData] = useState<fixtureDataType>();
+  const [fixtureHomeLineup, setFixtureHomeLineup] = useState<lineupData>({
+    0: [],
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: [],
+    6: [],
+    7: [],
+    8: [],
+    9: [],
+    10: [],
+  });
+  const [fixtureAwayLineup, setFixtureAwayLineup] = useState<lineupData>({
+    0: [],
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: [],
+    6: [],
+    7: [],
+    8: [],
+    9: [],
+    10: [],
+  });
+  const [scores, setScores] = useState([0, 0]);
+  const [selectedPlayer, setSelectedPlayer] = useState({
+    isHome: true,
+    positionNumber: 3,
+  });
+  const [fixtureStatistics, setFixturesStatistics] = useState();
+  const [homeTotalLineup, setHomeTotalLineup] = useState<any[]>([]);
+  const [awayTotalLineup, setAwayTotalLineup] = useState<any[]>([]);
+  const [homeKorLineup, setHomeKorLineup] = useState<korLineupType>([]);
+  const [awayKorLineup, setAwayKorLineup] = useState<korLineupType>([]);
+  const [changeCount, setChangeCount] = useState(0);
+  const [pageReady, setPageReady] = useState(false);
+
+  const homeId = useRef(-1);
+  const awayId = useRef(-1);
+
+  useEffect(() => {
+    const headers = {
+      'x-rapidapi-key': 'ae8a0daf8b42d12818ccbdec67ca30f5',
+      'x-rapidapi-host': 'v3.football.api-sports.io',
+    };
+    axios
+      .get(
+        'http://localhost:8000/api/match/fixture?fixture_id=' + params.fixture,
+      )
+      .then((res) => {
+        setFixtureData(res.data);
+        homeId.current = res.data.home_id;
+        awayId.current = res.data.away_id;
+
+        axios
+          .get(
+            'http://localhost:8000/api/match/player/lineup?team_id=' +
+              homeId.current,
+          )
+          .then((res) => {
+            setHomeKorLineup(res.data);
+          })
+          .catch((err) => console.log(err));
+        axios
+          .get(
+            'http://localhost:8000/api/match/player/lineup?team_id=' +
+              awayId.current,
+          )
+          .then((res) => {
+            setAwayKorLineup(res.data);
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    axios
+      .get('https://v3.football.api-sports.io/fixtures?id=' + params.fixture, {
+        headers: headers,
+      })
+      .then((res) => {
+        const response = res.data.response[0];
+        // 초기 라인업 집어넣기
+        // 홈팀
+        let homeLineupData: lineupData = {
+          0: [],
+          1: [],
+          2: [],
+          3: [],
+          4: [],
+          5: [],
+          6: [],
+          7: [],
+          8: [],
+          9: [],
+          10: [],
+        };
+        let awayLineupData: lineupData = {
+          0: [],
+          1: [],
+          2: [],
+          3: [],
+          4: [],
+          5: [],
+          6: [],
+          7: [],
+          8: [],
+          9: [],
+          10: [],
+        };
+        for (let playerNumber in response.lineups[0].startXI) {
+          let player = response.lineups[0].startXI[playerNumber].player;
+          let inputPlayer: lineupPlayerData = {
+            id: player.id,
+            name: player.name,
+            jerseyNumber: player.number,
+            goalCount: 0,
+            isWarned: false,
+            isBanned: false,
+            substitution: false,
+            position: player.pos,
+          };
+          homeLineupData[parseInt(playerNumber)] = [inputPlayer];
+        }
+        // 어웨이팀
+        for (let playerNumber in response.lineups[1].startXI) {
+          let player = response.lineups[1].startXI[playerNumber].player;
+          let inputPlayer: lineupPlayerData = {
+            id: player.id,
+            name: player.name,
+            jerseyNumber: player.number,
+            goalCount: 0,
+            isWarned: false,
+            isBanned: false,
+            substitution: false,
+            position: player.pos,
+          };
+          awayLineupData[parseInt(playerNumber)] = [inputPlayer];
+        }
+
+        setFixtureHomeLineup(homeLineupData);
+        setFixtureAwayLineup(awayLineupData);
+        setHomeTotalLineup([
+          ...res.data.response[0].lineups[0].startXI,
+          ...res.data.response[0].lineups[0].substitutes,
+        ]);
+        setAwayTotalLineup([
+          ...res.data.response[0].lineups[1].startXI,
+          ...res.data.response[0].lineups[1].substitutes,
+        ]);
+        setChangeCount(0);
+        setPageReady(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-full overflow-hidden">
       {/* 상단 */}
       <div className="flex h-1/4 w-full">
         <div className="flex h-full w-full">
           {/* 팝업 컴포넌트 */}
-          <div className="flex w-1/4 h-full items-center p-4">
-            <div className="flex w-full h-full bg-white border-8 rounded-3xl border-black"></div>
-          </div>
+          <PopupComponent></PopupComponent>
           {/* 스코어보드 컴포넌트 */}
-          <div className="flex w-2/4 h-full justify-center">
-            <div className="flex flex-col h-2/3 w-4/5">
-              <div className="flex h-1/2 w-full bg-yellow-400 text-3xl text-center border-8 rounded-2xl">
-                <div className="flex h-full w-full">
-                  <div className="grid h-full w-1/3 bg-slate-200 text-3xl text-center items-center">
-                    국기
-                  </div>
-                  <div className="grid items-center h-full w-full">
-                    스코틀랜드
-                  </div>
-                  <div className="grid h-full w-1/4 bg-slate-200 text-3xl text-center items-center">
-                    0
-                  </div>
-                </div>
-                <Separator
-                  orientation="vertical"
-                  decorative
-                  className="w-1 h-full p-1"
-                ></Separator>
-                <div className="flex h-full w-full">
-                  <div className="grid h-full w-1/4 bg-slate-200 text-3xl text-center items-center">
-                    0
-                  </div>
-                  <div className="grid items-center  h-full w-full">
-                    스코틀랜드
-                  </div>
-                  <div className="grid h-full w-1/4 bg-slate-200 text-3xl text-center items-center">
-                    국기
-                  </div>
-                </div>
-              </div>
-              <div className="flex h-1/2 w-full justify-center">
-                <div className="grid items-center h-2/3 w-1/6 bg-amber-300 text-center text-3xl border-r-8 border-l-8 border-b-8 rounded-b-xl">
-                  00:00
-                </div>
-              </div>
-            </div>
-          </div>
+          <ScoreBoardComponent
+            homeName={fixtureData?.kor_homename}
+            awayName={fixtureData?.kor_awayname}
+            homeId={fixtureData?.home_id}
+            awayId={fixtureData?.away_id}
+            fixtureId={params.fixture}
+            pageReady={pageReady}
+          ></ScoreBoardComponent>
           <div className="flex w-1/4 h-full"></div>
         </div>
       </div>
       {/* 하단 */}
       <div className="flex h-full w-full">
         {/* 포메이션 컴포넌트 */}
-        <div className="flex w-1/4 h-full items-center justify-center p-4">
-          <Image src={Field} alt={''} className="flex w-full h-fit "></Image>
-        </div>
+        <FormationComponent
+          fixtureHomeLineup={fixtureHomeLineup}
+          fixtureAwayLineup={fixtureAwayLineup}
+          fixtureId={params.fixture}
+          setPlayerId={setSelectedPlayer}
+          korHomeLineup={homeKorLineup}
+          korAwayLineup={awayKorLineup}
+          changeCount={changeCount}
+          pageReady={pageReady}
+        ></FormationComponent>
+        <PlayerStatisticsComponent
+          korLineup={{ ...homeKorLineup, ...awayKorLineup }}
+          playerId={selectedPlayer}
+          fixture={params.fixture}
+          fixtureHomeLineup={fixtureHomeLineup}
+          fixtureAwayLineup={fixtureAwayLineup}
+        ></PlayerStatisticsComponent>
         {/* 코멘트 컴포넌트 */}
-        <div className="flex flex-col w-2/4 h-full justify-center items-center">
-          <div className="h-3/4 w-full"></div>
-          <div className="h-1/4 w-4/5">
-            <div className="relative h-5/6 w-full items-center justify-center">
-              <Image
-                src={KopImage}
-                alt={''}
-                className="absolute z-10 w-1/5 h-full border-solid border-8 rounded-full bg-white"
-              ></Image>
-              <div className="absolute flex flex-col w-11/12 h-full text-3xl border-8 rounded-3xl left-20">
-                <div className="grid h-1/2 w-full items-center text-center border-b-8 pl-24 bg-blue-500">
-                  코멘트 제목
-                </div>
-                <div className="grid h-1/2 w-full items-center text-center pl-24 bg-green-500">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <CommentComponent
+          fixtureHomeLineup={fixtureHomeLineup}
+          fixtureAwayLineup={fixtureAwayLineup}
+          fixtureId={params.fixture}
+          homeId={homeId.current}
+          awayId={awayId.current}
+          korHomeLineup={homeKorLineup}
+          korAwayLineup={awayKorLineup}
+          homeTotalLineup={homeTotalLineup}
+          awayTotalLineup={awayTotalLineup}
+          setFixtureHomeLineup={setFixtureHomeLineup}
+          setFixtureAwayLineup={setFixtureAwayLineup}
+          setChangeCount={setChangeCount}
+          changeCount={changeCount}
+          pageReady={pageReady}
+        ></CommentComponent>
         {/* 경기정보 컴포넌트 */}
-        <div className="flex flex-col w-1/4 h-full justify-end">
-          <div className="flex w-full h-3/5 p-8 items-center">
-            <div className="flex flex-col w-full h-full bg-white rounded-3xl border-8 border-black">
-              <div className="flex w-full h-fit border-b-8">
-                <div className="flex w-full h-[10rem] border-r-8"></div>
-                <div className="flex w-full h-[10rem]"></div>
-              </div>
-              <div className="flex w-full h-fit text-3xl text-center border-b-8">
-                <div className="grid w-full h-fit border-r-8">홈팀</div>
-                <div className="grid w-full h-fit">어웨이팀</div>
-              </div>
-              <div className="flex flex-col w-full h-full text-3xl text-center">
-                <div className="flex w-full h-full">
-                  <div className="grid w-full h-full">80%</div>
-                  <div className="grid w-full h-full">점유율</div>
-                  <div className="grid w-full h-full">20%</div>
-                </div>
-                <div className="flex w-full h-full">
-                  <div className="grid w-full h-full">80%</div>
-                  <div className="grid w-full h-full">점유율</div>
-                  <div className="grid w-full h-full">20%</div>
-                </div>
-                <div className="flex w-full h-full">
-                  <div className="grid w-full h-full">80%</div>
-                  <div className="grid w-full h-full">점유율</div>
-                  <div className="grid w-full h-full">20%</div>
-                </div>
-                <div className="flex w-full h-full">
-                  <div className="grid w-full h-full">80%</div>
-                  <div className="grid w-full h-full">점유율</div>
-                  <div className="grid w-full h-full">20%</div>
-                </div>
-                <div className="flex w-full h-full">
-                  <div className="grid w-full h-full">80%</div>
-                  <div className="grid w-full h-full">점유율</div>
-                  <div className="grid w-full h-full">20%</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <FixtureStatisticsComponent
+          homeName={fixtureData?.kor_homename}
+          awayName={fixtureData?.kor_awayname}
+          homeId={fixtureData?.home_id}
+          awayId={fixtureData?.away_id}
+          fixtureId={params.fixture}
+          pageReady={pageReady}
+        ></FixtureStatisticsComponent>
       </div>
     </div>
   );

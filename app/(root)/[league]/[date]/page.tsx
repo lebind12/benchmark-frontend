@@ -22,6 +22,27 @@ type fixtureData = {
   venue: string;
 };
 
+const leagueConvert = (leagueId: string) => {
+  let convertedId = 39;
+  switch (leagueId) {
+    case 'champions':
+      convertedId = 2;
+      break;
+    case 'europa':
+      convertedId = 3;
+      break;
+    case 'karabao':
+      convertedId = 48;
+      break;
+    case 'fa':
+      convertedId = 45;
+      break;
+    default:
+      convertedId = 39;
+  }
+  return convertedId;
+};
+
 export default function Page({
   params,
 }: {
@@ -34,10 +55,10 @@ export default function Page({
       .get(
         'http://localhost:8000/api/match/fixture?date=' +
           params.date +
-          '&league_id=39',
+          '&league_id=' +
+          leagueConvert(params.league),
       )
       .then((res) => {
-        console.log(res.data);
         setFixtureList(res.data);
       })
       .catch((error) => {
@@ -60,8 +81,9 @@ export default function Page({
             AwayTeam={fixture.kor_awayname}
             HomeId={fixture.home_id.toString()}
             AwayId={fixture.away_id.toString()}
-            Date={fixture.date.split('T')[1]}
+            Date={fixture.date}
             venue={fixture.venue}
+            fixtureId={fixture.fixture_id.toString()}
           ></TeamVersusComponent>
         ))}
       </div>

@@ -1,12 +1,24 @@
 import Image from 'next/image';
 import '@/styles/fonts.css';
 
-const ScoreBoardComponent = () => {
+type ScoreBoardComponentProps = {
+  HomeId: number;
+  AwayId: number;
+  venue: string;
+  fixtureId: number;
+};
+
+const ScoreBoardComponent = ({
+  HomeId,
+  AwayId,
+  venue,
+  fixtureId,
+}: ScoreBoardComponentProps) => {
   return (
     <div className="flex flex-col w-full h-full bg-primary-50 text-2xl rounded-xl font-['ONE-Mobile-POP']">
       <div className="flex w-full h-full p-4">
         <Image
-          src={'https://media.api-sports.io/football/teams/33.png'}
+          src={'https://media.api-sports.io/football/teams/' + HomeId + '.png'}
           alt={''}
           width={120}
           height={120}
@@ -17,7 +29,7 @@ const ScoreBoardComponent = () => {
           <span className="text-5xl">0</span>
         </div>
         <Image
-          src={'https://media.api-sports.io/football/teams/33.png'}
+          src={'https://media.api-sports.io/football/teams/' + AwayId + '.png'}
           alt={''}
           width={120}
           height={120}
@@ -28,7 +40,7 @@ const ScoreBoardComponent = () => {
           <span className="text-xl">90</span>
           <span className="text-xl"> 분</span>
         </div>
-        <span className="text-xl">에미레이트 스타디움</span>
+        <span className="text-xl">{venue}</span>
       </div>
     </div>
   );

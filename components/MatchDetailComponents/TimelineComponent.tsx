@@ -1,19 +1,24 @@
 import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
 
-const TimeLineComponent = () => {
+type TimeLineComponentProps = {
+  HomeId: number;
+  AwayId: number;
+};
+
+const TimeLineComponent = ({ HomeId, AwayId }: TimeLineComponentProps) => {
   return (
     <div className="flex flex-col w-full h-full bg-primary-50 text-2xl rounded-xl font-['ONE-Mobile-POP']">
       <div className="flex w-full h-fit p-4 justify-evenly">
         <Image
-          src={'https://media.api-sports.io/football/teams/33.png'}
+          src={'https://media.api-sports.io/football/teams/' + HomeId + '.png'}
           alt={''}
           width={36}
           height={36}
         />
         <Separator orientation="vertical"></Separator>
         <Image
-          src={'https://media.api-sports.io/football/teams/33.png'}
+          src={'https://media.api-sports.io/football/teams/' + AwayId + '.png'}
           alt={''}
           width={36}
           height={36}

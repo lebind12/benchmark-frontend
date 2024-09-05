@@ -1,6 +1,11 @@
 import { Separator } from '../ui/separator';
 
-const LineupComponent = () => {
+type LineupComponentProps = {
+  HomeId: number;
+  AwayId: number;
+};
+
+const LineupComponent = ({}: LineupComponentProps) => {
   return (
     <div className="flex flex-col w-full h-full bg-primary-50 text-2xl rounded-xl font-['ONE-Mobile-POP'] p-4 gap-2">
       <div className="flex w-full justify-evenly">
