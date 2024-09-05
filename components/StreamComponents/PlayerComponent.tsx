@@ -70,7 +70,7 @@ const PlayerComponent = ({
       try {
         setPlayerKorName(korFixtureLineup[parseInt(playerId)]);
       } catch (err) {
-        setPlayerKorName(playerId);
+        setPlayerKorName(fixtureLineup[positionNumber][0]?.name);
         console.log(err);
       }
     }
@@ -81,9 +81,9 @@ const PlayerComponent = ({
       try {
         let name = korFixtureLineup[fixtureLineup[positionNumber][0]?.id];
         if (typeof name !== 'undefined') setPlayerKorName(name);
-        else setPlayerKorName(playerId);
+        else setPlayerKorName(fixtureLineup[positionNumber][0]?.name);
       } catch (err) {
-        setPlayerKorName(playerId);
+        setPlayerKorName(fixtureLineup[positionNumber][0]?.name);
         console.log(err);
       }
     }

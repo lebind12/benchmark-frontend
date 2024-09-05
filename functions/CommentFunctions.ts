@@ -29,15 +29,27 @@ type EventResponseType = {
   };
   player: {
     id: number;
-    name: number;
+    name: string;
   };
   assist: {
     id: number | null;
-    name: number | null;
+    name: string | null;
   };
   type: string;
   detail: string;
   comments: string | null;
+};
+
+const getKorName = (
+  korFixtureLineup: korLineupType,
+  id: number,
+  engName: string,
+) => {
+  if (typeof korFixtureLineup[id] === 'undefined') {
+    return engName;
+  } else {
+    return korFixtureLineup[id];
+  }
 };
 
 export const makeComment = (
@@ -200,13 +212,21 @@ const goalEvent = (
         homeFixtureLineup[positionNumber][0].goalCount++;
         commentTitle = eventData.time.elapsed + '분 골!';
         commentDetail =
-          korFixtureLineup[eventData.player.id] + '가 골을 기록합니다.';
+          getKorName(
+            korFixtureLineup,
+            eventData.player.id,
+            eventData.player.name,
+          ) + '가 골을 기록합니다.';
         commentFlag = 'Home';
       } else {
         awayFixtureLineup[positionNumber][0].goalCount++;
         commentTitle = eventData.time.elapsed + '분 골!';
         commentDetail =
-          korFixtureLineup[eventData.player.id] + '가 골을 기록합니다.';
+          getKorName(
+            korFixtureLineup,
+            eventData.player.id,
+            eventData.player.name,
+          ) + '가 골을 기록합니다.';
         commentFlag = 'Away';
       }
       break;
@@ -215,13 +235,21 @@ const goalEvent = (
         awayFixtureLineup[positionNumber][0].goalCount++;
         commentTitle = eventData.time.elapsed + '분 자책골';
         commentDetail =
-          korFixtureLineup[eventData.player.id] + '가 자책골을 기록합니다.';
+          getKorName(
+            korFixtureLineup,
+            eventData.player.id,
+            eventData.player.name,
+          ) + '가 자책골을 기록합니다.';
         commentFlag = 'Home';
       } else {
         homeFixtureLineup[positionNumber][0].goalCount++;
         commentTitle = eventData.time.elapsed + '분 자책골';
         commentDetail =
-          korFixtureLineup[eventData.player.id] + '가 자책골을 기록합니다.';
+          getKorName(
+            korFixtureLineup,
+            eventData.player.id,
+            eventData.player.name,
+          ) + '가 자책골을 기록합니다.';
         commentFlag = 'Away';
       }
       break;
@@ -251,13 +279,15 @@ const yellowCard = (
     homeFixtureLineup[positionNumber][0].isWarned = true;
     commentTitle = eventData.time.elapsed + '분 경고';
     commentDetail =
-      korFixtureLineup[eventData.player.id] + '가 옐로우카드를 받습니다.';
+      getKorName(korFixtureLineup, eventData.player.id, eventData.player.name) +
+      '가 옐로우카드를 받습니다.';
     commentFlag = 'Home';
   } else {
     awayFixtureLineup[positionNumber][0].isWarned = true;
     commentTitle = eventData.time.elapsed + '분 경고';
     commentDetail =
-      korFixtureLineup[eventData.player.id] + '가 옐로우카드를 받습니다.';
+      getKorName(korFixtureLineup, eventData.player.id, eventData.player.name) +
+      '가 옐로우카드를 받습니다.';
     commentFlag = 'Away';
   }
   return {
@@ -281,13 +311,15 @@ const redCard = (
     homeFixtureLineup[positionNumber][0].isBanned = true;
     commentTitle = eventData.time.elapsed + '분 퇴장';
     commentDetail =
-      korFixtureLineup[eventData.player.id] + '가 레드카드를 받습니다.';
+      getKorName(korFixtureLineup, eventData.player.id, eventData.player.name) +
+      '가 레드카드를 받습니다.';
     commentFlag = 'Home';
   } else {
     awayFixtureLineup[positionNumber][0].isBanned = true;
     commentTitle = eventData.time.elapsed + '분 퇴장';
     commentDetail =
-      korFixtureLineup[eventData.player.id] + '가 레드카드를 받습니다.';
+      getKorName(korFixtureLineup, eventData.player.id, eventData.player.name) +
+      '가 레드카드를 받습니다.';
     commentFlag = 'Away';
   }
 
@@ -324,11 +356,14 @@ const substitutionEvent = (
         break;
       }
     }
-    console.log(eventData.assist);
-    if (eventData.assist.id !== null) {
+    if (eventData.assist.id !== null && eventData.assist.name !== null) {
       newPlayer = {
         id: eventData.assist.id,
-        name: korFixtureLineup[eventData.assist.id],
+        name: getKorName(
+          korFixtureLineup,
+          eventData.assist.id,
+          eventData.assist.name,
+        ),
         jerseyNumber: newJerseyNumber,
         goalCount: 0,
         isWarned: false,
@@ -343,11 +378,19 @@ const substitutionEvent = (
       commentTitle = eventData.time.elapsed + '분 선수교체';
       commentDetail =
         '[' +
-        korFixtureLineup[eventData.player.id] +
+        getKorName(
+          korFixtureLineup,
+          eventData.player.id,
+          eventData.player.name,
+        ) +
         ']' +
-        ' 나가고' +
+        ' 나가고 ' +
         '[' +
-        korFixtureLineup[eventData.assist.id] +
+        getKorName(
+          korFixtureLineup,
+          eventData.assist.id,
+          eventData.assist.name,
+        ) +
         ']' +
         ' 들어갑니다.';
       commentFlag = 'Home';
@@ -362,11 +405,14 @@ const substitutionEvent = (
         break;
       }
     }
-    console.log(eventData.assist);
-    if (eventData.assist.id !== null) {
+    if (eventData.assist.id !== null && eventData.assist.name !== null) {
       newPlayer = {
         id: eventData.assist.id,
-        name: korFixtureLineup[eventData.assist.id],
+        name: getKorName(
+          korFixtureLineup,
+          eventData.assist.id,
+          eventData.assist.name,
+        ),
         jerseyNumber: newJerseyNumber,
         goalCount: 0,
         isWarned: false,
@@ -381,11 +427,19 @@ const substitutionEvent = (
       commentTitle = eventData.time.elapsed + '분 선수교체';
       commentDetail =
         '[' +
-        korFixtureLineup[eventData.player.id] +
+        getKorName(
+          korFixtureLineup,
+          eventData.player.id,
+          eventData.player.name,
+        ) +
         ']' +
-        ' 나가고' +
+        ' 나가고 ' +
         '[' +
-        korFixtureLineup[eventData.assist.id] +
+        getKorName(
+          korFixtureLineup,
+          eventData.assist.id,
+          eventData.assist.name,
+        ) +
         ']' +
         ' 들어갑니다.';
       commentFlag = 'Away';
