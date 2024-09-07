@@ -52,11 +52,11 @@ type EventResponseType = {
   };
   player: {
     id: number;
-    name: number;
+    name: string;
   };
   assist: {
     id: number | null;
-    name: number | null;
+    name: string | null;
   };
   type: string;
   detail: string;
