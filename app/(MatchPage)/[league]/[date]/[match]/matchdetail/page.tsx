@@ -7,6 +7,7 @@ import FormationComponent from '@/components/MatchDetailComponents/FormationComp
 import MatchStatisticsComponent from '@/components/MatchDetailComponents/MatchStatisticsComponent';
 import LineupComponent from '@/components/MatchDetailComponents/LineupComponent';
 import axios from 'axios';
+import { benchmarkAPI } from '@/apis/backend';
 
 type fixtureDataType = {
   fixture_id: number;
@@ -51,14 +52,14 @@ export default function Home({
     league_name: 'Premier League',
   });
   useEffect(() => {
-    axios
-      .get('http://localhost:8000/api/match/fixture?fixture_id=' + params.match)
+    benchmarkAPI
+      .get('/api/match/fixture', {
+        params: { fixture_id: params.match },
+      })
       .then((res) => {
         setFixtureData(res.data);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((err) => console.log(err));
   }, []);
 
   return (

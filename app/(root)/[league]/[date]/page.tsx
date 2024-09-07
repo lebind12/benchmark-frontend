@@ -4,6 +4,7 @@ import DatePickPage from '@/components/ScheduleComponent/DatePickComponent';
 import TeamVersusComponent from '@/components/ScheduleComponent/TeamVersusComponent';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { benchmarkAPI } from '@/apis/backend';
 
 type fixtureData = {
   away_id: number;
@@ -51,19 +52,17 @@ export default function Page({
   const [fixtureList, setFixtureList] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(
-        'http://localhost:8000/api/match/fixture?date=' +
-          params.date +
-          '&league_id=' +
-          leagueConvert(params.league),
-      )
+    benchmarkAPI
+      .get('/api/match/fixture', {
+        params: {
+          date: params.date,
+          league_id: leagueConvert(params.league).toString(),
+        },
+      })
       .then((res) => {
         setFixtureList(res.data);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((err) => console.log(err));
   }, []);
 
   return (

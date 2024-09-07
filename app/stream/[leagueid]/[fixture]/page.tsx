@@ -1,4 +1,6 @@
 'use client';
+import { benchmarkAPI } from '@/apis/backend';
+import { footballAPI } from '@/apis/footballAPI';
 import CommentComponent from '@/components/StreamComponents/CommentComponent';
 import FixtureStatisticsComponent from '@/components/StreamComponents/FixtureStatisticsComponent';
 import FormationComponent from '@/components/StreamComponents/FormationComponent';
@@ -98,39 +100,72 @@ export default function Home({
       'x-rapidapi-key': 'ae8a0daf8b42d12818ccbdec67ca30f5',
       'x-rapidapi-host': 'v3.football.api-sports.io',
     };
-    axios
-      .get(
-        'http://localhost:8000/api/match/fixture?fixture_id=' + params.fixture,
-      )
+
+    benchmarkAPI
+      .get('/api/match/fixture', {
+        params: {
+          fixture_id: params.fixture,
+        },
+      })
       .then((res) => {
         setFixtureData(res.data);
         homeId.current = res.data.home_id;
         awayId.current = res.data.away_id;
-
-        axios
-          .get(
-            'http://localhost:8000/api/match/player/lineup?team_id=' +
-              homeId.current,
-          )
+        benchmarkAPI
+          .get('/api/match/player/lineup', {
+            params: {
+              team_id: homeId.current,
+            },
+          })
           .then((res) => {
             setHomeKorLineup(res.data);
           })
           .catch((err) => console.log(err));
-        axios
-          .get(
-            'http://localhost:8000/api/match/player/lineup?team_id=' +
-              awayId.current,
-          )
+        benchmarkAPI
+          .get('/api/match/player/lineup', {
+            params: {
+              team_id: awayId.current,
+            },
+          })
           .then((res) => {
             setAwayKorLineup(res.data);
           })
           .catch((err) => console.log(err));
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
 
-    axios
+    benchmarkAPI
+      .get('/api/match/fixture', {
+        params: {
+          fixture_id: params.fixture,
+        },
+      })
+      .then((res) => {
+        setFixtureData(res.data);
+        homeId.current = res.data.home_id;
+        awayId.current = res.data.away_id;
+
+        benchmarkAPI
+          .get('/api/match/player/lineup', {
+            params: { team_id: homeId.current },
+          })
+          .then((res) => {
+            setHomeKorLineup(res.data);
+          })
+          .catch((err) => console.log(err));
+
+        benchmarkAPI
+          .get('/api/match/player/lineup', {
+            params: { team_id: awayId.current },
+          })
+          .then((res) => {
+            setAwayKorLineup(res.data);
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+
+    footballAPI
       .get('https://v3.football.api-sports.io/fixtures?id=' + params.fixture, {
         headers: headers,
       })
