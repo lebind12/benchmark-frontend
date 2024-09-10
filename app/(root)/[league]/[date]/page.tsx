@@ -2,7 +2,6 @@
 
 import DatePickPage from '@/components/ScheduleComponent/DatePickComponent';
 import TeamVersusComponent from '@/components/ScheduleComponent/TeamVersusComponent';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { benchmarkAPI } from '@/apis/backend';
 

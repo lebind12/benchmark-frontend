@@ -6,7 +6,6 @@ import TimeLineComponent from '@/components/MatchDetailComponents/TimelineCompon
 import FormationComponent from '@/components/MatchDetailComponents/FormationComponent';
 import MatchStatisticsComponent from '@/components/MatchDetailComponents/MatchStatisticsComponent';
 import LineupComponent from '@/components/MatchDetailComponents/LineupComponent';
-import axios from 'axios';
 import { benchmarkAPI } from '@/apis/backend';
 
 type fixtureDataType = {

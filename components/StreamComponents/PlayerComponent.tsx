@@ -4,7 +4,6 @@ import Goal from '@/public/assets/Goal.png';
 import Image from 'next/image';
 import YellowCard from '@/public/Yellow_card.svg';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { cn } from '@/lib/utils';
 
 type lineupData = {

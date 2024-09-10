@@ -1,5 +1,5 @@
+import { footballAPI } from '@/apis/footballAPI';
 import useInterval from '@/hooks/intervalHook';
-import axios from 'axios';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -32,14 +32,8 @@ const FixtureStatisticsComponent = ({
       'x-rapidapi-host': 'v3.football.api-sports.io',
     };
     if (pageReady) {
-      axios
-        .get(
-          'https://v3.football.api-sports.io/fixtures/statistics?fixture=' +
-            fixtureId,
-          {
-            headers: headers,
-          },
-        )
+      footballAPI
+        .get('fixtures/statistics', { params: { fixture: fixtureId } })
         .then((res) => {
           setHomeStatistics(res.data.response[0].statistics);
           setAwayStatistics(res.data.response[1].statistics);
@@ -52,18 +46,8 @@ const FixtureStatisticsComponent = ({
   }, [pageReady]);
 
   useInterval(() => {
-    const headers = {
-      'x-rapidapi-key': 'ae8a0daf8b42d12818ccbdec67ca30f5',
-      'x-rapidapi-host': 'v3.football.api-sports.io',
-    };
-    axios
-      .get(
-        'https://v3.football.api-sports.io/fixtures/statistics?fixture=' +
-          fixtureId,
-        {
-          headers: headers,
-        },
-      )
+    footballAPI
+      .get('fixtures/statistics', { params: { fixture: fixtureId } })
       .then((res) => {
         setHomeStatistics(res.data.response[0].statistics);
         setAwayStatistics(res.data.response[1].statistics);

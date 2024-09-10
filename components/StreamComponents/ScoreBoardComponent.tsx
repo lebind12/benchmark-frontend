@@ -3,7 +3,7 @@ import { Separator } from '../ui/separator';
 import Image from 'next/image';
 import useInterval from '@/hooks/intervalHook';
 import '@/app/globals.css';
-import axios from 'axios';
+import { footballAPI } from '@/apis/footballAPI';
 
 type ScoreBoardComponentProps = {
   homeName: string | undefined;
@@ -31,14 +31,12 @@ const ScoreBoardComponent = ({
   const [awayScore, setAwayScore] = useState(0);
 
   useEffect(() => {
-    const headers = {
-      'x-rapidapi-key': 'ae8a0daf8b42d12818ccbdec67ca30f5',
-      'x-rapidapi-host': 'v3.football.api-sports.io',
-    };
     if (pageReady) {
-      axios
-        .get('https://v3.football.api-sports.io/fixtures/?id=' + fixtureId, {
-          headers: headers,
+      footballAPI
+        .get('/fixtures', {
+          params: {
+            id: fixtureId,
+          },
         })
         .then((res) => {
           setHomeScore(res.data.response[0]?.goals?.home);
@@ -51,13 +49,11 @@ const ScoreBoardComponent = ({
   }, [pageReady]);
 
   useInterval(() => {
-    const headers = {
-      'x-rapidapi-key': 'ae8a0daf8b42d12818ccbdec67ca30f5',
-      'x-rapidapi-host': 'v3.football.api-sports.io',
-    };
-    axios
-      .get('https://v3.football.api-sports.io/fixtures/?id=' + fixtureId, {
-        headers: headers,
+    footballAPI
+      .get('/fixtures', {
+        params: {
+          id: fixtureId,
+        },
       })
       .then((res) => {
         setHomeScore(res.data.response[0]?.goals?.home);

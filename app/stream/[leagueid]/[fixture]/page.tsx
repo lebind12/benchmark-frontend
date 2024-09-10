@@ -8,7 +8,6 @@ import PlayerStatisticsComponent from '@/components/StreamComponents/PlayerStati
 import PopupComponent from '@/components/StreamComponents/PopupComponent';
 import ScoreBoardComponent from '@/components/StreamComponents/ScoreBoardComponent';
 import useInterval from '@/hooks/intervalHook';
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
 type fixtureDataType = {

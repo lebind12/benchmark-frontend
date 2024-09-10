@@ -1,10 +1,9 @@
 import Image from 'next/image';
 import Field from '@/public/assets/FieldBoard.png';
 import { SetStateAction, useEffect, useRef, useState } from 'react';
-import axios from 'axios';
-import Tshirts from '@/public/tshirts2.svg';
 import PlayerComponent from './PlayerComponent';
 import 'animate.css';
+import { footballAPI } from '@/apis/footballAPI';
 
 type lineupData = {
   [key: number]: lineupPlayerData[];
@@ -63,19 +62,11 @@ const FormationComponent = ({
   const awayIndex = useRef(0);
 
   useEffect(() => {
-    const headers = {
-      'x-rapidapi-key': 'ae8a0daf8b42d12818ccbdec67ca30f5',
-      'x-rapidapi-host': 'v3.football.api-sports.io',
-    };
     if (pageReady) {
-      axios
-        .get(
-          'https://v3.football.api-sports.io/fixtures/lineups?fixture=' +
-            fixtureId,
-          {
-            headers: headers,
-          },
-        )
+      footballAPI
+        .get('/fixtures/lineups', {
+          params: { fixture: fixtureId },
+        })
         .then((res) => {
           if (res.data.response.length > 0) {
             setHomeTeamColor(res.data.response[0].team.colors.player.primary);

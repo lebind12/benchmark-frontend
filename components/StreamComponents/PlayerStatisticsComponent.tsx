@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { footballAPI } from '@/apis/footballAPI';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
@@ -128,15 +128,12 @@ const PlayerStatisticsComponent = ({
     }
     setSubNumber(0);
 
-    const headers = {
-      'x-rapidapi-key': 'ae8a0daf8b42d12818ccbdec67ca30f5',
-      'x-rapidapi-host': 'v3.football.api-sports.io',
-    };
-    axios
-      .get(
-        'https://v3.football.api-sports.io/fixtures/players?fixture=' + fixture,
-        { headers: headers },
-      )
+    footballAPI
+      .get('/fixtures/players', {
+        params: {
+          fixture: fixture,
+        },
+      })
       .then((res) => {
         let totalPlayerLineupData = [
           ...res.data.response[0].players,
@@ -185,15 +182,13 @@ const PlayerStatisticsComponent = ({
       else setKorPlayerName(id?.toString());
       setPID(id);
     }
-    const headers = {
-      'x-rapidapi-key': 'ae8a0daf8b42d12818ccbdec67ca30f5',
-      'x-rapidapi-host': 'v3.football.api-sports.io',
-    };
-    axios
-      .get(
-        'https://v3.football.api-sports.io/fixtures/players?fixture=' + fixture,
-        { headers: headers },
-      )
+
+    footballAPI
+      .get('/fixtures/players', {
+        params: {
+          fixture: fixture,
+        },
+      })
       .then((res) => {
         let totalPlayerLineupData = [
           ...res.data.response[0].players,

@@ -1,9 +1,9 @@
 import useInterval from '@/hooks/intervalHook';
 import KopImage from '@/public/assets/eaglekop.png';
-import axios from 'axios';
 import Image, { StaticImageData } from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { makeComment } from '@/functions/CommentFunctions';
+import { footballAPI } from '@/apis/footballAPI';
 
 type lineupData = {
   [key: number]: lineupPlayerData[];
@@ -92,12 +92,8 @@ const CommentComponent = ({
   };
   useEffect(() => {
     if (pageReady && !commentUpdate) {
-      axios
-        .get(
-          'https://v3.football.api-sports.io/fixtures/events?fixture=' +
-            fixtureId,
-          { headers: headers },
-        )
+      footballAPI
+        .get('/fixtures/events', { params: { fixture: fixtureId } })
         .then((res) => {
           const response: Array<EventResponseType> = res.data.response;
           if (response.length > 0) {
@@ -131,12 +127,8 @@ const CommentComponent = ({
   }, [pageReady]);
 
   useInterval(() => {
-    axios
-      .get(
-        'https://v3.football.api-sports.io/fixtures/events?fixture=' +
-          fixtureId,
-        { headers: headers },
-      )
+    footballAPI
+      .get('/fixtures/events', { params: { fixture: fixtureId } })
       .then((res) => {
         const response: Array<EventResponseType> = res.data.response;
         if (response.length > index.current) {
