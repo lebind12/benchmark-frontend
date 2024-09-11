@@ -95,11 +95,6 @@ export default function Home({
   const awayId = useRef(-1);
 
   useEffect(() => {
-    const headers = {
-      'x-rapidapi-key': 'ae8a0daf8b42d12818ccbdec67ca30f5',
-      'x-rapidapi-host': 'v3.football.api-sports.io',
-    };
-
     benchmarkAPI
       .get('/api/match/fixture', {
         params: {
@@ -165,8 +160,10 @@ export default function Home({
       .catch((err) => console.log(err));
 
     footballAPI
-      .get('https://v3.football.api-sports.io/fixtures?id=' + params.fixture, {
-        headers: headers,
+      .get('/fixtures', {
+        params: {
+          id: params.fixture,
+        },
       })
       .then((res) => {
         const response = res.data.response[0];
