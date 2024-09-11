@@ -174,6 +174,7 @@ export default function Home({
               <MatchStatisticsComponent
                 HomeId={fixtureData?.home_id}
                 AwayId={fixtureData?.away_id}
+                statistics={fixtureData?.statistics}
               ></MatchStatisticsComponent>
             </div>
           </div>
