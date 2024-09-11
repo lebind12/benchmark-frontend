@@ -1,4 +1,4 @@
-import advertise from '@/public/8.png';
+import advertise from '@/public/assets/cafeImage.png';
 import Image from 'next/image';
 
 const RightSideNavigation = () => {
