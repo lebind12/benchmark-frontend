@@ -73,17 +73,20 @@ const MatchStatisticsComponent = ({
           .map((index, key) => {
             if (statistics !== undefined) {
               let statisticsName = translateTypeName(
-                statistics[0].statistics[index].type,
+                statistics[0]?.statistics[index]?.type,
               );
               if (statisticsName == null) return <></>;
               return (
-                <div className="grid grid-cols-3 w-full justify-evenly">
+                <div
+                  className="grid grid-cols-3 w-full justify-evenly"
+                  key={key}
+                >
                   <span className="text-center">
-                    {statistics[0].statistics[index].value}
+                    {statistics[0]?.statistics[index].value}
                   </span>
                   <span className="text-center">{statisticsName}</span>
                   <span className="text-center">
-                    {statistics[1].statistics[index].value}
+                    {statistics[1]?.statistics[index].value}
                   </span>
                 </div>
               );
