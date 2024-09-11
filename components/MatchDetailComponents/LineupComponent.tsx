@@ -1,8 +1,8 @@
 import { Separator } from '../ui/separator';
 
 type LineupComponentProps = {
-  HomeId: number;
-  AwayId: number;
+  HomeId: number | undefined;
+  AwayId: number | undefined;
 };
 
 const LineupComponent = ({}: LineupComponentProps) => {

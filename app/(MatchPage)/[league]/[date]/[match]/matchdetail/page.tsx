@@ -25,6 +25,103 @@ type fixtureDataType = {
   league_name: string;
 };
 
+type eventType = {
+  time: {
+    elapsed: number;
+    extra: number | null;
+  };
+  team: {
+    id: number;
+    name: string;
+    logo: string;
+  };
+  player: {
+    id: number;
+    name: string;
+  };
+  assist: {
+    id: number | null;
+    name: number | null;
+  };
+  type: string;
+  detail: string;
+  comments: string;
+};
+
+type lineupType = {
+  team: {
+    id: number;
+    name: string;
+    logo: string;
+    colors: {
+      player: {
+        primary: string;
+        number: string;
+        border: string;
+      };
+      goalkeeper: {
+        primary: string;
+        number: string;
+        border: string;
+      };
+    };
+  };
+};
+
+type playerType = {
+  player: {
+    id: number;
+    name: string;
+    number: number;
+    pos: string;
+    grid: string;
+  };
+};
+
+type fixtureResponseType = {
+  id: number;
+  fixture_id: number;
+  eng_homename: string;
+  kor_homename: string;
+  home_id: number;
+  status: string;
+  league_id: number;
+  event: Array<eventType>;
+  lineup: Array<{
+    team: lineupType;
+    coach: {
+      id: number;
+      name: string;
+      photo: string;
+    };
+    formation: string;
+    startXI: Array<playerType>;
+    substitutes: Array<playerType>;
+  }>;
+  venue: string;
+  roundname: string;
+  date: string;
+  eng_awayname: string;
+  kor_awayname: string;
+  away_id: number;
+  league_name: string;
+  score: {
+    home: number;
+    away: number;
+  };
+  statistics: Array<{
+    team: {
+      id: number;
+      name: string;
+      logo: string;
+    };
+    statistics: Array<{
+      type: string;
+      value: number;
+    }>;
+  }>;
+};
+
 export default function Home({
   params,
 }: {
@@ -34,22 +131,8 @@ export default function Home({
     match: string;
   };
 }) {
-  const [fixtureData, setFixtureData] = useState<fixtureDataType>({
-    fixture_id: 1208021,
-    id: 1,
-    eng_homename: 'Manchester United',
-    kor_homename: '맨체스터 유나이티드',
-    home_id: 33,
-    status: 'Not Started',
-    league_id: 39,
-    venue: 'Old Trafford',
-    roundname: 'Regular Season - 1',
-    date: '2024-08-17T04:00:00',
-    eng_awayname: 'Fulham',
-    kor_awayname: '풀럼',
-    away_id: 36,
-    league_name: 'Premier League',
-  });
+  const [fixtureData, setFixtureData] = useState<fixtureResponseType>();
+  const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     benchmarkAPI
       .get('/api/match/fixture', {
@@ -57,48 +140,61 @@ export default function Home({
       })
       .then((res) => {
         setFixtureData(res.data);
+        setIsLoaded(true);
       })
       .catch((err) => console.log(err));
   }, []);
 
   return (
-    <div className="flex h-full w-full mt-4 gap-4">
-      <div className="flex flex-col w-2/5 h-full gap-4">
-        <div className="w-full h-fit">
-          <ScoreBoardComponent
-            HomeId={fixtureData.home_id}
-            AwayId={fixtureData.away_id}
-            venue={fixtureData.venue}
-            fixtureId={fixtureData.fixture_id}
-          ></ScoreBoardComponent>
+    <>
+      {isLoaded ? (
+        <div className="flex h-full w-full mt-4 gap-4">
+          <div className="flex flex-col w-2/5 h-full gap-4">
+            <div className="w-full h-fit">
+              <ScoreBoardComponent
+                HomeId={fixtureData?.home_id}
+                AwayId={fixtureData?.away_id}
+                score={fixtureData?.score}
+                homeName={fixtureData?.kor_homename}
+                awayName={fixtureData?.kor_awayname}
+                venue={fixtureData?.venue}
+                fixtureState={fixtureData?.status}
+              ></ScoreBoardComponent>
+            </div>
+            <div className="w-full h-fit">
+              <TimeLineComponent
+                HomeId={fixtureData?.home_id}
+                AwayId={fixtureData?.away_id}
+                homeName={fixtureData?.kor_homename}
+                awayName={fixtureData?.kor_awayname}
+                eventData={fixtureData?.event}
+              ></TimeLineComponent>
+            </div>
+            <div className="w-full h-full">
+              <MatchStatisticsComponent
+                HomeId={fixtureData?.home_id}
+                AwayId={fixtureData?.away_id}
+              ></MatchStatisticsComponent>
+            </div>
+          </div>
+          <div className="flex flex-col w-3/5 h-full gap-4">
+            <div className="w-full h-fit">
+              <FormationComponent
+                HomeId={fixtureData?.home_id}
+                AwayId={fixtureData?.away_id}
+              ></FormationComponent>
+            </div>
+            <div className="w-full h-full">
+              <LineupComponent
+                HomeId={fixtureData?.home_id}
+                AwayId={fixtureData?.away_id}
+              ></LineupComponent>
+            </div>
+          </div>
         </div>
-        <div className="w-full h-fit">
-          <TimeLineComponent
-            HomeId={fixtureData.home_id}
-            AwayId={fixtureData.away_id}
-          ></TimeLineComponent>
-        </div>
-        <div className="w-full h-full">
-          <MatchStatisticsComponent
-            HomeId={fixtureData.home_id}
-            AwayId={fixtureData.away_id}
-          ></MatchStatisticsComponent>
-        </div>
-      </div>
-      <div className="flex flex-col w-3/5 h-full gap-4">
-        <div className="w-full h-fit">
-          <FormationComponent
-            HomeId={fixtureData.home_id}
-            AwayId={fixtureData.away_id}
-          ></FormationComponent>
-        </div>
-        <div className="w-full h-full">
-          <LineupComponent
-            HomeId={fixtureData.home_id}
-            AwayId={fixtureData.away_id}
-          ></LineupComponent>
-        </div>
-      </div>
-    </div>
+      ) : (
+        <div></div>
+      )}
+    </>
   );
 }

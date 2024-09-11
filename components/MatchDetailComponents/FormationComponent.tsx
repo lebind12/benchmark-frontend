@@ -2,8 +2,8 @@ import Field from '@/public/footballfield.jpeg';
 import Image from 'next/image';
 
 type FormationComponentProps = {
-  HomeId: number;
-  AwayId: number;
+  HomeId: number | undefined;
+  AwayId: number | undefined;
 };
 
 const FormationComponent = ({}: FormationComponentProps) => {

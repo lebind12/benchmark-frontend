@@ -2,8 +2,8 @@ import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
 
 type MatchStatisticsComponentProps = {
-  HomeId: number;
-  AwayId: number;
+  HomeId: number | undefined;
+  AwayId: number | undefined;
 };
 
 const MatchStatisticsComponent = ({
