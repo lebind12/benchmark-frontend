@@ -71,6 +71,7 @@ export const makeComment = (
     commentDetail: '',
     commentFlag: '',
   };
+  console.log(eventData);
   try {
     if (homeManagerId == eventData.player.id) {
       return ReturnCommentData;
@@ -148,7 +149,7 @@ export const makeComment = (
             korFixtureLineup,
             eventData,
           );
-        else if (eventData.detail === 'Red card')
+        else if (eventData.detail === 'Red Card')
           ReturnCommentData = redCard(
             getIsHome(homeId, awayId, eventData),
             getPositionNumber(
