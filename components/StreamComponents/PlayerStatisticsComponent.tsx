@@ -165,7 +165,10 @@ const PlayerStatisticsComponent = ({
         }
         setIsLoaded(true);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setIsLoaded(true);
+      });
   }, [playerId]);
 
   useEffect(() => {
@@ -220,7 +223,10 @@ const PlayerStatisticsComponent = ({
         }
         setIsLoaded(true);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setIsLoaded(true);
+      });
   }, [subNumber]);
 
   const handleNext = () => {
@@ -280,21 +286,21 @@ const PlayerStatisticsComponent = ({
                   <span>오프사이드</span>
                   <span>{player.offsides ?? 0}</span>
                 </div>
-                <div className="grid grid-cols-2 text-center items-center w-full h-fit">
+                {/* <div className="grid grid-cols-2 text-center items-center w-full h-fit">
                   <span>태클</span>
                   <span>
                     {player.tackles?.total ?? 0}/{player.tackles?.blocks ?? 0}/
                     {player.tackles?.interceptions ?? 0}
                   </span>
-                </div>
-                <div className="grid grid-cols-2 text-center items-center w-full h-fit">
+                </div> */}
+                {/* <div className="grid grid-cols-2 text-center items-center w-full h-fit">
                   <span>파울</span>
                   <span>
                     {player.fouls?.drawn ?? 0}/{player.fouls?.committed ?? 0}
                   </span>
-                </div>
+                </div> */}
                 <div className="grid grid-cols-2 text-center items-center w-full h-fit">
-                  <span>슈팅</span>
+                  <span>전체 슈팅 / 유효 슈팅</span>
                   <span>
                     {player.shots?.total ?? 0}/{player.shots?.on ?? 0}
                   </span>
@@ -307,13 +313,13 @@ const PlayerStatisticsComponent = ({
                   <span>어시스트</span>
                   <span>{player.goals?.assists ?? 0}</span>
                 </div>
-                <div className="grid grid-cols-2 text-center items-center w-full h-fit">
+                {/* <div className="grid grid-cols-2 text-center items-center w-full h-fit">
                   <span>패스(전체/주요/정확도)</span>
                   <span>
                     {player.passes?.total ?? 0}/{player.passes?.key ?? 0}/
                     {player.passes?.accuracy ?? 0}
                   </span>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="grid grid-cols-3 w-full">
@@ -322,7 +328,6 @@ const PlayerStatisticsComponent = ({
               ) : (
                 <button onClick={handlePrev}>이전</button>
               )}
-
               <button onClick={handleQuit}>나가기</button>
               {subNumber < positionLength.current - 1 ? (
                 <button onClick={handleNext}>다음</button>
@@ -332,7 +337,9 @@ const PlayerStatisticsComponent = ({
             </div>
           </>
         ) : (
-          <></>
+          <>
+            <button onClick={handleQuit}>나가기</button>
+          </>
         )}
       </div>
     </div>
