@@ -75,25 +75,52 @@ export const makeComment = (
       ReturnCommentData = VAR(eventData.detail, eventData);
       break;
     case 'subst':
-      ReturnCommentData = substitutionEvent(
-        getIsHome(homeId, awayId, eventData),
-        getPositionNumber(
+      let pN = getPositionNumber(
+        homeId,
+        awayId,
+        homeFixtureLineup,
+        awayFixtureLineup,
+        eventData.player.id,
+        eventData,
+      );
+      if (pN == -1) {
+        pN = getPositionNumber(
           homeId,
           awayId,
           homeFixtureLineup,
           awayFixtureLineup,
-          eventData.player.id,
+          eventData.assist.id,
           eventData,
-        ),
-        homeFixtureLineup,
-        awayFixtureLineup,
-        homeTotalLineup,
-        awayTotalLineup,
-        korFixtureLineup,
-        setFixtureHomeLineup,
-        setFixtureAwayLineup,
-        eventData,
-      );
+        );
+        ReturnCommentData = substitutionEvent(
+          getIsHome(homeId, awayId, eventData),
+          pN,
+          homeFixtureLineup,
+          awayFixtureLineup,
+          homeTotalLineup,
+          awayTotalLineup,
+          korFixtureLineup,
+          setFixtureHomeLineup,
+          setFixtureAwayLineup,
+          eventData,
+          true,
+        );
+      } else {
+        ReturnCommentData = substitutionEvent(
+          getIsHome(homeId, awayId, eventData),
+          pN,
+          homeFixtureLineup,
+          awayFixtureLineup,
+          homeTotalLineup,
+          awayTotalLineup,
+          korFixtureLineup,
+          setFixtureHomeLineup,
+          setFixtureAwayLineup,
+          eventData,
+          false,
+        );
+      }
+
       break;
     case 'Card':
       if (eventData.detail === 'Yellow Card')
@@ -167,7 +194,7 @@ const getPositionNumber = (
   awayId: number,
   homeFixtureLineup: lineupData,
   awayFixtureLineup: lineupData,
-  playerId: number,
+  playerId: number | null,
   eventData: EventResponseType,
 ) => {
   if (eventData.detail === 'Own Goal') {
@@ -340,111 +367,215 @@ const substitutionEvent = (
   setFixtureHomeLineup: any,
   setFixtureAwayLineup: any,
   eventData: EventResponseType,
+  subError: boolean,
 ) => {
   let newPlayer: lineupPlayerData;
   let commentTitle = '';
   let commentDetail = '';
   let commentFlag = '';
-  console.log(eventData);
-  if (isHome) {
-    let newJerseyNumber;
-    let newPosition;
-    for (let i = 0; i < homeTotalLineup.length; i++) {
-      if (homeTotalLineup[i].player.id === eventData.assist.id) {
-        newJerseyNumber = homeTotalLineup[i].player.number;
-        newPosition = homeTotalLineup[i].player.pos;
-        break;
+  // console.log(eventData);
+  if (subError) {
+    if (isHome) {
+      let newJerseyNumber;
+      let newPosition;
+      for (let i = 0; i < homeTotalLineup.length; i++) {
+        if (homeTotalLineup[i].player.id === eventData.player.id) {
+          newJerseyNumber = homeTotalLineup[i].player.number;
+          newPosition = homeTotalLineup[i].player.pos;
+          break;
+        }
       }
-    }
-    if (eventData.assist.id !== null && eventData.assist.name !== null) {
-      newPlayer = {
-        id: eventData.assist.id,
-        name: getKorName(
-          korFixtureLineup,
-          eventData.assist.id,
-          eventData.assist.name,
-        ),
-        jerseyNumber: newJerseyNumber,
-        goalCount: 0,
-        isWarned: false,
-        isBanned: false,
-        substitution: true,
-        position: newPosition,
-      };
-      setFixtureHomeLineup({
-        ...homeFixtureLineup,
-        [positionNumber]: [newPlayer, ...homeFixtureLineup[positionNumber]],
-      });
-      commentTitle = eventData.time.elapsed + '분 선수교체';
-      commentDetail =
-        '[' +
-        getKorName(
-          korFixtureLineup,
-          eventData.player.id,
-          eventData.player.name,
-        ) +
-        ']' +
-        ' 나가고 ' +
-        '[' +
-        getKorName(
-          korFixtureLineup,
-          eventData.assist.id,
-          eventData.assist.name,
-        ) +
-        ']' +
-        ' 들어갑니다.';
-      commentFlag = 'Home';
+      if (eventData.player.id !== null && eventData.player.name !== null) {
+        newPlayer = {
+          id: eventData.player.id,
+          name: getKorName(
+            korFixtureLineup,
+            eventData.player.id,
+            eventData.player.name,
+          ),
+          jerseyNumber: newJerseyNumber,
+          goalCount: 0,
+          isWarned: false,
+          isBanned: false,
+          substitution: true,
+          position: newPosition,
+        };
+        setFixtureHomeLineup({
+          ...homeFixtureLineup,
+          [positionNumber]: [newPlayer, ...homeFixtureLineup[positionNumber]],
+        });
+        commentTitle = eventData.time.elapsed + '분 선수교체';
+        commentDetail =
+          '[' +
+          getKorName(
+            korFixtureLineup,
+            eventData.assist.id ?? 0,
+            eventData.assist.name ?? '',
+          ) +
+          ']' +
+          ' 나가고 ' +
+          '[' +
+          getKorName(
+            korFixtureLineup,
+            eventData.player.id,
+            eventData.player.name,
+          ) +
+          ']' +
+          ' 들어갑니다.';
+        commentFlag = 'Home';
+      }
+    } else {
+      let newJerseyNumber;
+      let newPosition;
+      for (let i = 0; i < awayTotalLineup.length; i++) {
+        if (awayTotalLineup[i].player.id === eventData.player.id) {
+          newJerseyNumber = awayTotalLineup[i].player.number;
+          newPosition = awayTotalLineup[i].player.pos;
+          break;
+        }
+      }
+      if (eventData.assist.id !== null && eventData.assist.name !== null) {
+        newPlayer = {
+          id: eventData.player.id,
+          name: getKorName(
+            korFixtureLineup,
+            eventData.player.id,
+            eventData.player.name,
+          ),
+          jerseyNumber: newJerseyNumber,
+          goalCount: 0,
+          isWarned: false,
+          isBanned: false,
+          substitution: true,
+          position: newPosition,
+        };
+        setFixtureAwayLineup({
+          ...awayFixtureLineup,
+          [positionNumber]: [newPlayer, ...awayFixtureLineup[positionNumber]],
+        });
+        commentTitle = eventData.time.elapsed + '분 선수교체';
+        commentDetail =
+          '[' +
+          getKorName(
+            korFixtureLineup,
+            eventData.assist.id,
+            eventData.assist.name,
+          ) +
+          ']' +
+          ' 나가고 ' +
+          '[' +
+          getKorName(
+            korFixtureLineup,
+            eventData.player.id,
+            eventData.player.name,
+          ) +
+          ']' +
+          ' 들어갑니다.';
+        commentFlag = 'Away';
+      }
     }
   } else {
-    let newJerseyNumber;
-    let newPosition;
-    for (let i = 0; i < awayTotalLineup.length; i++) {
-      if (awayTotalLineup[i].player.id === eventData.assist.id) {
-        newJerseyNumber = awayTotalLineup[i].player.number;
-        newPosition = awayTotalLineup[i].player.pos;
-        break;
+    if (isHome) {
+      let newJerseyNumber;
+      let newPosition;
+      for (let i = 0; i < homeTotalLineup.length; i++) {
+        if (homeTotalLineup[i].player.id === eventData.assist.id) {
+          newJerseyNumber = homeTotalLineup[i].player.number;
+          newPosition = homeTotalLineup[i].player.pos;
+          break;
+        }
+      }
+      if (eventData.assist.id !== null && eventData.assist.name !== null) {
+        newPlayer = {
+          id: eventData.assist.id,
+          name: getKorName(
+            korFixtureLineup,
+            eventData.assist.id,
+            eventData.assist.name,
+          ),
+          jerseyNumber: newJerseyNumber,
+          goalCount: 0,
+          isWarned: false,
+          isBanned: false,
+          substitution: true,
+          position: newPosition,
+        };
+        setFixtureHomeLineup({
+          ...homeFixtureLineup,
+          [positionNumber]: [newPlayer, ...homeFixtureLineup[positionNumber]],
+        });
+        commentTitle = eventData.time.elapsed + '분 선수교체';
+        commentDetail =
+          '[' +
+          getKorName(
+            korFixtureLineup,
+            eventData.player.id,
+            eventData.player.name,
+          ) +
+          ']' +
+          ' 나가고 ' +
+          '[' +
+          getKorName(
+            korFixtureLineup,
+            eventData.assist.id,
+            eventData.assist.name,
+          ) +
+          ']' +
+          ' 들어갑니다.';
+        commentFlag = 'Home';
+      }
+    } else {
+      let newJerseyNumber;
+      let newPosition;
+      for (let i = 0; i < awayTotalLineup.length; i++) {
+        if (awayTotalLineup[i].player.id === eventData.assist.id) {
+          newJerseyNumber = awayTotalLineup[i].player.number;
+          newPosition = awayTotalLineup[i].player.pos;
+          break;
+        }
+      }
+      if (eventData.assist.id !== null && eventData.assist.name !== null) {
+        newPlayer = {
+          id: eventData.assist.id,
+          name: getKorName(
+            korFixtureLineup,
+            eventData.assist.id,
+            eventData.assist.name,
+          ),
+          jerseyNumber: newJerseyNumber,
+          goalCount: 0,
+          isWarned: false,
+          isBanned: false,
+          substitution: true,
+          position: newPosition,
+        };
+        setFixtureAwayLineup({
+          ...awayFixtureLineup,
+          [positionNumber]: [newPlayer, ...awayFixtureLineup[positionNumber]],
+        });
+        commentTitle = eventData.time.elapsed + '분 선수교체';
+        commentDetail =
+          '[' +
+          getKorName(
+            korFixtureLineup,
+            eventData.player.id,
+            eventData.player.name,
+          ) +
+          ']' +
+          ' 나가고 ' +
+          '[' +
+          getKorName(
+            korFixtureLineup,
+            eventData.assist.id,
+            eventData.assist.name,
+          ) +
+          ']' +
+          ' 들어갑니다.';
+        commentFlag = 'Away';
       }
     }
-    if (eventData.assist.id !== null && eventData.assist.name !== null) {
-      newPlayer = {
-        id: eventData.assist.id,
-        name: getKorName(
-          korFixtureLineup,
-          eventData.assist.id,
-          eventData.assist.name,
-        ),
-        jerseyNumber: newJerseyNumber,
-        goalCount: 0,
-        isWarned: false,
-        isBanned: false,
-        substitution: true,
-        position: newPosition,
-      };
-      setFixtureAwayLineup({
-        ...awayFixtureLineup,
-        [positionNumber]: [newPlayer, ...awayFixtureLineup[positionNumber]],
-      });
-      commentTitle = eventData.time.elapsed + '분 선수교체';
-      commentDetail =
-        '[' +
-        getKorName(
-          korFixtureLineup,
-          eventData.player.id,
-          eventData.player.name,
-        ) +
-        ']' +
-        ' 나가고 ' +
-        '[' +
-        getKorName(
-          korFixtureLineup,
-          eventData.assist.id,
-          eventData.assist.name,
-        ) +
-        ']' +
-        ' 들어갑니다.';
-      commentFlag = 'Away';
-    }
   }
+
   return {
     commentTitle: commentTitle,
     commentDetail: commentDetail,
