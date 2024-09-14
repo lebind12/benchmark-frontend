@@ -286,6 +286,12 @@ const PlayerStatisticsComponent = ({
                   <span>오프사이드</span>
                   <span>{player.offsides ?? 0}</span>
                 </div>
+                <div className="grid grid-cols-2 text-center items-center w-full h-fit">
+                  <span>경고|퇴장</span>
+                  <span>
+                    {player.cards.yellow ?? 0}/{player.cards.red ?? 0}
+                  </span>
+                </div>
                 {/* <div className="grid grid-cols-2 text-center items-center w-full h-fit">
                   <span>태클</span>
                   <span>
