@@ -90,6 +90,8 @@ export default function Home({
   const [awayKorLineup, setAwayKorLineup] = useState<korLineupType>([]);
   const [changeCount, setChangeCount] = useState(0);
   const [pageReady, setPageReady] = useState(false);
+  const [homeKorLineupReady, setHomeKorLineupReady] = useState(false);
+  const [awayKorLineupReady, setAwayKorLineupReady] = useState(false);
 
   const homeId = useRef(-1);
   const awayId = useRef(-1);
@@ -145,6 +147,7 @@ export default function Home({
           })
           .then((res) => {
             setHomeKorLineup(res.data);
+            setHomeKorLineupReady(true);
           })
           .catch((err) => console.log(err));
 
@@ -154,6 +157,7 @@ export default function Home({
           })
           .then((res) => {
             setAwayKorLineup(res.data);
+            setAwayKorLineupReady(true);
           })
           .catch((err) => console.log(err));
       })
@@ -274,6 +278,8 @@ export default function Home({
           korAwayLineup={awayKorLineup}
           changeCount={changeCount}
           pageReady={pageReady}
+          korAwayLineupReady={awayKorLineupReady}
+          korHomeLineupReady={homeKorLineupReady}
         ></FormationComponent>
         <PlayerStatisticsComponent
           korLineup={{ ...homeKorLineup, ...awayKorLineup }}

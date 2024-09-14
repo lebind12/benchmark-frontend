@@ -32,6 +32,8 @@ type FormationComponentProps = {
   setPlayerId: any;
   changeCount: number;
   pageReady: boolean;
+  korHomeLineupReady: boolean;
+  korAwayLineupReady: boolean;
 };
 
 const FormationComponent = ({
@@ -43,6 +45,8 @@ const FormationComponent = ({
   setPlayerId,
   changeCount,
   pageReady,
+  korHomeLineupReady,
+  korAwayLineupReady,
 }: FormationComponentProps) => {
   const [homeLineup, setHomeLineup] = useState<Array<any>>([]);
   const [awayLineup, setAwayLineup] = useState<Array<any>>([]);
@@ -62,7 +66,7 @@ const FormationComponent = ({
   const awayIndex = useRef(0);
 
   useEffect(() => {
-    if (pageReady) {
+    if (pageReady && korHomeLineupReady && korAwayLineupReady) {
       footballAPI
         .get('/fixtures/lineups', {
           params: { fixture: fixtureId },
@@ -130,7 +134,7 @@ const FormationComponent = ({
           console.log(err);
         });
     }
-  }, [pageReady]);
+  }, [pageReady, korAwayLineupReady, korHomeLineupReady]);
 
   return (
     <div className="flex flex-col w-1/4 h-full items-center justify-center pl-4 font-['TTLaundryGothicB']">

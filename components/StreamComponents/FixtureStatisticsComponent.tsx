@@ -56,7 +56,7 @@ const FixtureStatisticsComponent = ({
       .catch((err) => {
         console.log(err);
       });
-  }, 30000);
+  }, 10000);
 
   return (
     <div className="flex flex-col w-1/4 h-full justify-end font-['MangoDdobak-B']">
