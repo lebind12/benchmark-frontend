@@ -105,12 +105,12 @@ const PopupComponent = () => {
     setTimeout(() => {
       setPollState(false);
       // 투표진행 후 결과 표시
-    }, 5 * 1000);
+    }, 60 * 1000);
     setTimeout(() => {
       setPopupState(false);
       setUsers([]);
-    }, 8 * 1000);
-  }, 10 * 1000);
+    }, 90 * 1000);
+  }, 10 * 60 * 1000);
 
   return (
     <div className="flex w-1/4 h-full items-center p-4">
