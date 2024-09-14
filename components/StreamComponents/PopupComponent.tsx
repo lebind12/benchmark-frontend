@@ -105,12 +105,12 @@ const PopupComponent = () => {
     setTimeout(() => {
       setPollState(false);
       // 투표진행 후 결과 표시
-    }, 60 * 1000);
+    }, 5 * 1000);
     setTimeout(() => {
       setPopupState(false);
       setUsers([]);
-    }, 90 * 1000);
-  }, 10 * 60 * 1000);
+    }, 8 * 1000);
+  }, 10 * 1000);
 
   return (
     <div className="flex w-1/4 h-full items-center p-4">
@@ -125,7 +125,12 @@ const PopupComponent = () => {
                 이기고 있는 팀은 어디로 보시나요?
               </div>
               <div className="flex w-full text-xl justify-center items-center">
-                홈: !투표1 어웨이: !투표2
+                <span className="flex w-full justify-center text-center">
+                  홈: !투표1
+                </span>
+                <span className="flex w-full justify-center text-center">
+                  어웨이: !투표2
+                </span>
               </div>
             </>
           ) : (
