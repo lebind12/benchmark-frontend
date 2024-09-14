@@ -63,121 +63,134 @@ export const makeComment = (
   setFixtureHomeLineup: any,
   setFixtureAwayLineup: any,
   eventData: EventResponseType,
+  homeManagerId: number,
+  awayManagerId: number,
 ) => {
   let ReturnCommentData = {
     commentTitle: '',
     commentDetail: '',
     commentFlag: '',
   };
+  try {
+    if (homeManagerId == eventData.player.id) {
+      return ReturnCommentData;
+    }
+    if (awayManagerId == eventData.player.id) {
+      return ReturnCommentData;
+    }
 
-  switch (eventData.type) {
-    case 'Var':
-      ReturnCommentData = VAR(eventData.detail, eventData);
-      break;
-    case 'subst':
-      let pN = getPositionNumber(
-        homeId,
-        awayId,
-        homeFixtureLineup,
-        awayFixtureLineup,
-        eventData.player.id,
-        eventData,
-      );
-      if (pN == -1) {
-        pN = getPositionNumber(
-          homeId,
-          awayId,
-          homeFixtureLineup,
-          awayFixtureLineup,
-          eventData.assist.id,
-          eventData,
-        );
-        ReturnCommentData = substitutionEvent(
-          getIsHome(homeId, awayId, eventData),
-          pN,
-          homeFixtureLineup,
-          awayFixtureLineup,
-          homeTotalLineup,
-          awayTotalLineup,
-          korFixtureLineup,
-          setFixtureHomeLineup,
-          setFixtureAwayLineup,
-          eventData,
-          true,
-        );
-      } else {
-        ReturnCommentData = substitutionEvent(
-          getIsHome(homeId, awayId, eventData),
-          pN,
-          homeFixtureLineup,
-          awayFixtureLineup,
-          homeTotalLineup,
-          awayTotalLineup,
-          korFixtureLineup,
-          setFixtureHomeLineup,
-          setFixtureAwayLineup,
-          eventData,
-          false,
-        );
-      }
-
-      break;
-    case 'Card':
-      if (eventData.detail === 'Yellow Card')
-        ReturnCommentData = yellowCard(
-          getIsHome(homeId, awayId, eventData),
-          getPositionNumber(
-            homeId,
-            awayId,
-            homeFixtureLineup,
-            awayFixtureLineup,
-            eventData.player.id,
-            eventData,
-          ),
-          homeFixtureLineup,
-          awayFixtureLineup,
-          korFixtureLineup,
-          eventData,
-        );
-      else if (eventData.detail === 'Red card')
-        ReturnCommentData = redCard(
-          getIsHome(homeId, awayId, eventData),
-          getPositionNumber(
-            homeId,
-            awayId,
-            homeFixtureLineup,
-            awayFixtureLineup,
-            eventData.player.id,
-            eventData,
-          ),
-          homeFixtureLineup,
-          awayFixtureLineup,
-          korFixtureLineup,
-          eventData,
-        );
-      break;
-    case 'Goal':
-      ReturnCommentData = goalEvent(
-        getIsHome(homeId, awayId, eventData),
-        getPositionNumber(
+    switch (eventData.type) {
+      case 'Var':
+        ReturnCommentData = VAR(eventData.detail, eventData);
+        break;
+      case 'subst':
+        let pN = getPositionNumber(
           homeId,
           awayId,
           homeFixtureLineup,
           awayFixtureLineup,
           eventData.player.id,
           eventData,
-        ),
-        homeFixtureLineup,
-        awayFixtureLineup,
-        eventData.detail,
-        korFixtureLineup,
-        eventData,
-      );
-      break;
-    default:
-      break;
+        );
+        if (pN == -1) {
+          pN = getPositionNumber(
+            homeId,
+            awayId,
+            homeFixtureLineup,
+            awayFixtureLineup,
+            eventData.assist.id,
+            eventData,
+          );
+          ReturnCommentData = substitutionEvent(
+            getIsHome(homeId, awayId, eventData),
+            pN,
+            homeFixtureLineup,
+            awayFixtureLineup,
+            homeTotalLineup,
+            awayTotalLineup,
+            korFixtureLineup,
+            setFixtureHomeLineup,
+            setFixtureAwayLineup,
+            eventData,
+            true,
+          );
+        } else {
+          ReturnCommentData = substitutionEvent(
+            getIsHome(homeId, awayId, eventData),
+            pN,
+            homeFixtureLineup,
+            awayFixtureLineup,
+            homeTotalLineup,
+            awayTotalLineup,
+            korFixtureLineup,
+            setFixtureHomeLineup,
+            setFixtureAwayLineup,
+            eventData,
+            false,
+          );
+        }
+
+        break;
+      case 'Card':
+        if (eventData.detail === 'Yellow Card')
+          ReturnCommentData = yellowCard(
+            getIsHome(homeId, awayId, eventData),
+            getPositionNumber(
+              homeId,
+              awayId,
+              homeFixtureLineup,
+              awayFixtureLineup,
+              eventData.player.id,
+              eventData,
+            ),
+            homeFixtureLineup,
+            awayFixtureLineup,
+            korFixtureLineup,
+            eventData,
+          );
+        else if (eventData.detail === 'Red card')
+          ReturnCommentData = redCard(
+            getIsHome(homeId, awayId, eventData),
+            getPositionNumber(
+              homeId,
+              awayId,
+              homeFixtureLineup,
+              awayFixtureLineup,
+              eventData.player.id,
+              eventData,
+            ),
+            homeFixtureLineup,
+            awayFixtureLineup,
+            korFixtureLineup,
+            eventData,
+          );
+        break;
+      case 'Goal':
+        ReturnCommentData = goalEvent(
+          getIsHome(homeId, awayId, eventData),
+          getPositionNumber(
+            homeId,
+            awayId,
+            homeFixtureLineup,
+            awayFixtureLineup,
+            eventData.player.id,
+            eventData,
+          ),
+          homeFixtureLineup,
+          awayFixtureLineup,
+          eventData.detail,
+          korFixtureLineup,
+          eventData,
+        );
+        break;
+      default:
+        break;
+    }
+    return ReturnCommentData;
+  } catch {
+    ReturnCommentData.commentTitle = '처리되지 않는 이벤트입니다.';
+    return ReturnCommentData;
   }
-  return ReturnCommentData;
 };
 
 const getIsHome = (

@@ -92,6 +92,8 @@ export default function Home({
   const [pageReady, setPageReady] = useState(false);
   const [homeKorLineupReady, setHomeKorLineupReady] = useState(false);
   const [awayKorLineupReady, setAwayKorLineupReady] = useState(false);
+  const [homeManagerId, setHomeManagerId] = useState(0);
+  const [awayManagerId, setAwayManagerId] = useState(0);
 
   const homeId = useRef(-1);
   const awayId = useRef(-1);
@@ -199,6 +201,8 @@ export default function Home({
           9: [],
           10: [],
         };
+        setHomeManagerId(response.lineups[0].coach.id);
+        setAwayManagerId(response.lineups[1].coach.id);
         for (let playerNumber in response.lineups[0].startXI) {
           let player = response.lineups[0].startXI[playerNumber].player;
           let inputPlayer: lineupPlayerData = {
@@ -304,6 +308,8 @@ export default function Home({
           setChangeCount={setChangeCount}
           changeCount={changeCount}
           pageReady={pageReady}
+          homeManagerId={homeManagerId}
+          awayManagerId={awayManagerId}
         ></CommentComponent>
         {/* 경기정보 컴포넌트 */}
         <FixtureStatisticsComponent

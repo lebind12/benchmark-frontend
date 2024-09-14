@@ -38,6 +38,8 @@ type CommentComponentProps = {
   setChangeCount: Dispatch<SetStateAction<number>>;
   changeCount: number;
   pageReady: boolean;
+  homeManagerId: number;
+  awayManagerId: number;
 };
 
 type EventResponseType = {
@@ -78,6 +80,8 @@ const CommentComponent = ({
   setChangeCount,
   changeCount,
   pageReady,
+  homeManagerId,
+  awayManagerId,
 }: CommentComponentProps) => {
   const [eventQueue, setEventQueue] = useState<Array<EventResponseType>>([]);
   const index = useRef(0);
@@ -159,6 +163,8 @@ const CommentComponent = ({
         setFixtureHomeLineup,
         setFixtureAwayLineup,
         eventQueue[0],
+        homeManagerId,
+        awayManagerId,
       );
       setTitle(commentData.commentTitle);
       setDetail(commentData.commentDetail);
