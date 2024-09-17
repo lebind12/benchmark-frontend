@@ -122,6 +122,10 @@ type fixtureResponseType = {
   }>;
 };
 
+type korLineupType = {
+  [key: string]: string;
+};
+
 export default function Home({
   params,
 }: {
@@ -132,6 +136,8 @@ export default function Home({
   };
 }) {
   const [fixtureData, setFixtureData] = useState<fixtureResponseType>();
+  const [kor_homename, setKor_homename] = useState<korLineupType>();
+  const [kor_awayname, setKor_awayname] = useState<korLineupType>();
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     benchmarkAPI
@@ -140,6 +146,24 @@ export default function Home({
       })
       .then((res) => {
         setFixtureData(res.data);
+        benchmarkAPI
+          .get('/api/match/player/lineup', {
+            params: { team_id: res.data.home_id },
+          })
+          .then((res) => {
+            setKor_homename(res.data);
+            setIsLoaded(true);
+          })
+          .catch((err) => console.log(err));
+        benchmarkAPI
+          .get('/api/match/player/lineup', {
+            params: { team_id: res.data.away_id },
+          })
+          .then((res) => {
+            setKor_awayname(res.data);
+            setIsLoaded(true);
+          })
+          .catch((err) => console.log(err));
         setIsLoaded(true);
       })
       .catch((err) => console.log(err));
@@ -189,6 +213,12 @@ export default function Home({
               <LineupComponent
                 HomeId={fixtureData?.home_id}
                 AwayId={fixtureData?.away_id}
+                homeLineUp={fixtureData?.lineup[0].startXI}
+                awayLineUp={fixtureData?.lineup[1].startXI}
+                korLineUp={{
+                  homeLineUp: kor_homename,
+                  awayLineUp: kor_awayname,
+                }}
               ></LineupComponent>
             </div>
           </div>
