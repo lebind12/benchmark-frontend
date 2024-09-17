@@ -95,6 +95,7 @@ const TimeLineComponent = ({
           alt={''}
           width={36}
           height={36}
+          className="w-fit h-full"
         />
         <Separator orientation="vertical"></Separator>
         <Image
@@ -102,6 +103,7 @@ const TimeLineComponent = ({
           alt={''}
           width={36}
           height={36}
+          className="w-fit h-full"
         />
       </div>
       <Separator></Separator>

@@ -213,12 +213,15 @@ export default function Home({
               <LineupComponent
                 HomeId={fixtureData?.home_id}
                 AwayId={fixtureData?.away_id}
-                homeLineUp={fixtureData?.lineup[0].startXI}
-                awayLineUp={fixtureData?.lineup[1].startXI}
+                homeLineUp={fixtureData?.lineup?.[0]?.startXI ?? []}
+                awayLineUp={fixtureData?.lineup?.[1]?.startXI ?? []}
+                homeName={fixtureData?.kor_homename}
+                awayName={fixtureData?.kor_awayname}
                 korLineUp={{
                   homeLineUp: kor_homename,
                   awayLineUp: kor_awayname,
                 }}
+                status={fixtureData?.status}
               ></LineupComponent>
             </div>
           </div>
