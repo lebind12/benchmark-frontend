@@ -25,12 +25,20 @@ type eventType = {
   comments: string;
 };
 
+type korLineupType = {
+  [key: string]: string;
+};
+
 type TimeLineComponentProps = {
   HomeId: number | undefined;
   AwayId: number | undefined;
   homeName: string | undefined;
   awayName: string | undefined;
   eventData: Array<eventType> | undefined;
+  korLineUp: {
+    homeLineUp: korLineupType | undefined;
+    awayLineUp: korLineupType | undefined;
+  };
 };
 
 const TimeLineComponent = ({
@@ -39,8 +47,9 @@ const TimeLineComponent = ({
   homeName,
   awayName,
   eventData,
+  korLineUp,
 }: TimeLineComponentProps) => {
-  const generateNAme = (
+  const generateName = (
     event: eventType,
     homeName: string | undefined,
     awayName: string | undefined,
@@ -52,22 +61,36 @@ const TimeLineComponent = ({
   const makeTimelineData = (event: eventType, key: number) => {
     let teamName = '';
     let eventTitle = '';
+    let playerInfo = '';
     switch (event.type) {
       case 'Var':
-        teamName = generateNAme(event, homeName, awayName) ?? '';
+        teamName = generateName(event, homeName, awayName) ?? '';
         eventTitle = 'VAR';
         break;
       case 'subst':
-        teamName = generateNAme(event, homeName, awayName) ?? '';
+        teamName = generateName(event, homeName, awayName) ?? '';
         eventTitle = '교체';
+        if (event.team.id == HomeId) {
+          playerInfo = `${korLineUp.homeLineUp?.[event.player.id]} -> ${
+            event.assist?.id
+              ? korLineUp.homeLineUp?.[event.assist.id] ?? event.assist?.name
+              : event.assist?.name
+          }`;
+        } else {
+          playerInfo = `${korLineUp.awayLineUp?.[event.player.id]} -> ${
+            event.assist?.id
+              ? korLineUp.awayLineUp?.[event.assist.id] ?? event.assist?.name
+              : event.assist?.name
+          }`;
+        }
         break;
       case 'Card':
-        teamName = generateNAme(event, homeName, awayName) ?? '';
+        teamName = generateName(event, homeName, awayName) ?? '';
         if (event.detail == 'Yellow Card') eventTitle = '경고';
         else eventTitle = '퇴장';
         break;
       case 'Goal':
-        teamName = generateNAme(event, homeName, awayName) ?? '';
+        teamName = generateName(event, homeName, awayName) ?? '';
         eventTitle = '골!';
         break;
       default:
@@ -75,15 +98,29 @@ const TimeLineComponent = ({
     }
     if (event.team.id == HomeId)
       return (
-        <span key={key} className="w-full text-start">
-          {event.time.elapsed}분 {teamName} {eventTitle}
-        </span>
+        <div className="flex flex-col">
+          <span key={key} className="w-full text-start text-xl">
+            {event.time.elapsed}분 {teamName} {eventTitle}
+          </span>
+          <span className="w-full text-start">
+            {event.type === 'subst'
+              ? playerInfo
+              : korLineUp.homeLineUp?.[event.player.id]}
+          </span>
+        </div>
       );
     else
       return (
-        <span key={key} className="w-full text-end">
-          {event.time.elapsed}분 {teamName} {eventTitle}
-        </span>
+        <div className="flex flex-col">
+          <span key={key} className="w-full text-end text-xl">
+            {event.time.elapsed}분 {teamName} {eventTitle}
+          </span>
+          <span className="w-full text-end">
+            {event.type === 'subst'
+              ? playerInfo
+              : korLineUp.awayLineUp?.[event.player.id]}
+          </span>
+        </div>
       );
   };
 
@@ -107,7 +144,7 @@ const TimeLineComponent = ({
         />
       </div>
       <Separator></Separator>
-      <div className="flex flex-col w-full h-full justify-center text-sm font-light p-4">
+      <div className="flex flex-col w-full h-full justify-center text-sm font-['MangoDdobak-B'] font-light p-4">
         {eventData?.map((item, key) => makeTimelineData(item, key))}
       </div>
     </div>

@@ -192,6 +192,10 @@ export default function Home({
                 homeName={fixtureData?.kor_homename}
                 awayName={fixtureData?.kor_awayname}
                 eventData={fixtureData?.event}
+                korLineUp={{
+                  homeLineUp: kor_homename,
+                  awayLineUp: kor_awayname,
+                }}
               ></TimeLineComponent>
             </div>
             <div className="w-full h-full">
