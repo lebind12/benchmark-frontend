@@ -2,8 +2,10 @@
 
 import DatePickPage from '@/components/ScheduleComponent/DatePickComponent';
 import TeamVersusComponent from '@/components/ScheduleComponent/TeamVersusComponent';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import Image from 'next/image';
 import { benchmarkAPI } from '@/apis/backend';
+import LoadingImage from '@/public/assets/eaglekop.png';
 
 type fixtureData = {
   away_id: number;
@@ -20,6 +22,18 @@ type fixtureData = {
   roundname: string;
   status: string;
   venue: string;
+  score: {
+    home: number;
+    away: number;
+  };
+};
+
+const getMatchStatus = (status: string) => {
+  if (status === 'Match Finished') {
+    return '경기 종료';
+  } else {
+    return '경기 전';
+  }
 };
 
 const leagueConvert = (leagueId: string) => {
@@ -49,42 +63,62 @@ export default function Page({
   params: { league: string; date: string };
 }) {
   const [fixtureList, setFixtureList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    benchmarkAPI
-      .get('/api/match/fixture', {
-        params: {
-          date: params.date,
-          league_id: leagueConvert(params.league).toString(),
-        },
-      })
-      .then((res) => {
-        setFixtureList(res.data);
-      })
-      .catch((err) => console.log(err));
+    setIsLoading(false);
+    try {
+      benchmarkAPI
+        .get('/api/match/fixture', {
+          params: {
+            date: params.date,
+            league_id: leagueConvert(params.league).toString(),
+          },
+        })
+        .then((res) => {
+          setFixtureList(res.data);
+          setIsLoading(true);
+        })
+        .catch((err) => console.log(err));
+    } catch (err) {
+      console.log(err);
+      setIsLoading(true);
+    } finally {
+      setIsLoading(true);
+    }
   }, []);
 
   return (
-    <div>
-      <DatePickPage
-        league={params.league}
-        dateString={params.date}
-      ></DatePickPage>
-      <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 gap-4">
-        {fixtureList.map((fixture: fixtureData, key: number) => (
-          <TeamVersusComponent
-            key={key}
-            League={params.league}
-            HomeTeam={fixture.kor_homename}
-            AwayTeam={fixture.kor_awayname}
-            HomeId={fixture.home_id.toString()}
-            AwayId={fixture.away_id.toString()}
-            Date={fixture.date}
-            venue={fixture.venue}
-            fixtureId={fixture.fixture_id.toString()}
-          ></TeamVersusComponent>
-        ))}
-      </div>
-    </div>
+    <>
+      {isLoading ? (
+        <div>
+          <DatePickPage
+            league={params.league}
+            dateString={params.date}
+          ></DatePickPage>
+          <div className="grid 2xl:grid-cols-3 xl:grid-cols-2 gap-4">
+            {fixtureList.map((fixture: fixtureData, key: number) => (
+              <TeamVersusComponent
+                key={key}
+                League={params.league}
+                HomeTeam={fixture.kor_homename}
+                AwayTeam={fixture.kor_awayname}
+                HomeId={fixture.home_id.toString()}
+                AwayId={fixture.away_id.toString()}
+                Date={fixture.date}
+                venue={fixture.venue}
+                fixtureId={fixture.fixture_id.toString()}
+                status={fixture.status}
+                score={fixture.score}
+              ></TeamVersusComponent>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="flex justify-center items-center w-full h-full">
+          <Image src={LoadingImage} alt={''} width={120} height={120}></Image>
+        </div>
+      )}
+    </>
   );
 }

@@ -50,7 +50,12 @@ const PopupComponent = () => {
     client.on('chat', (chat) => {
       const message = chat.hidden ? '[블라인드 처리 됨]' : chat.message;
       const profile = chat.profile;
-      if (message === '!투표1' || message === '!투표2') {
+      if (
+        message === '!투표1' ||
+        message === '!투표2' ||
+        message === '!투표 1' ||
+        message === '!투표 2'
+      ) {
         let thisUser: ViewerType = {
           userIdHash: profile.userIdHash,
           badges: [],
@@ -141,11 +146,11 @@ const PopupComponent = () => {
               <div className="flex w-full text-xl justify-center items-center">
                 {'홈 ' +
                   users.filter((user: ViewerType) => {
-                    return user.vote === '!투표1';
+                    return user.vote === '!투표1' || user.vote === '!투표 1';
                   }).length +
                   ' 어웨이 ' +
                   users.filter((user: ViewerType) => {
-                    return user.vote === '!투표2';
+                    return user.vote === '!투표2' || user.vote === '!투표 2';
                   }).length}
               </div>
             </>

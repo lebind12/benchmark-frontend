@@ -124,6 +124,25 @@ const FixtureStatisticsComponent = ({
                 {awayStatistics[0]?.value}
               </div>
             </div>
+            {/*             
+            <div className="flex w-full h-full">
+              <div className="grid w-full h-full">
+                {homeStatistics[0]?.value}
+              </div>
+              <div className="grid w-full h-full">패스</div>
+              <div className="grid w-full h-full">
+                {awayStatistics[0]?.value}
+              </div>
+            </div>
+            <div className="flex w-full h-full">
+              <div className="grid w-full h-full">
+                {homeStatistics[0]?.value}
+              </div>
+              <div className="grid w-full h-full">패스성공률</div>
+              <div className="grid w-full h-full">
+                {awayStatistics[0]?.value}
+              </div>
+            </div> */}
             <div className="flex w-full h-full">
               <div className="grid w-full h-full">
                 {homeStatistics[8]?.value}
