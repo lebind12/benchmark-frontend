@@ -138,6 +138,8 @@ export default function Home({
   const [fixtureData, setFixtureData] = useState<fixtureResponseType>();
   const [kor_homename, setKor_homename] = useState<korLineupType>();
   const [kor_awayname, setKor_awayname] = useState<korLineupType>();
+  const [homeLineup, setHomeLineup] = useState<lineupType>();
+  const [awayLineup, setAwayLineup] = useState<lineupType>();
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     benchmarkAPI
@@ -146,6 +148,8 @@ export default function Home({
       })
       .then((res) => {
         setFixtureData(res.data);
+        setHomeLineup(res.data.lineup?.[0]?.startXI ?? []);
+        setAwayLineup(res.data.lineup?.[1]?.startXI ?? []);
         benchmarkAPI
           .get('/api/match/player/lineup', {
             params: { team_id: res.data.home_id },
@@ -211,7 +215,18 @@ export default function Home({
               <FormationComponent
                 HomeId={fixtureData?.home_id}
                 AwayId={fixtureData?.away_id}
+                homeLineup={fixtureData?.lineup?.[0]}
+                awayLineup={fixtureData?.lineup?.[1]}
+                korLineUp={{
+                  homeLineUp: kor_homename ?? {},
+                  awayLineUp: kor_awayname ?? {},
+                }}
               ></FormationComponent>
+            </div>
+            <div className="w-full h-fit">
+              <div className="w-full h-fit text-xl font-['MangoDdobak-B']">
+                선발
+              </div>
             </div>
             <div className="w-full h-full">
               <LineupComponent
@@ -219,6 +234,24 @@ export default function Home({
                 AwayId={fixtureData?.away_id}
                 homeLineUp={fixtureData?.lineup?.[0]?.startXI ?? []}
                 awayLineUp={fixtureData?.lineup?.[1]?.startXI ?? []}
+                homeName={fixtureData?.kor_homename}
+                awayName={fixtureData?.kor_awayname}
+                korLineUp={{
+                  homeLineUp: kor_homename,
+                  awayLineUp: kor_awayname,
+                }}
+                status={fixtureData?.status}
+              ></LineupComponent>
+            </div>
+            <div className="w-full h-full">
+              <div className="w-full h-fit text-xl font-['MangoDdobak-B']">
+                벤치
+              </div>
+              <LineupComponent
+                HomeId={fixtureData?.home_id}
+                AwayId={fixtureData?.away_id}
+                homeLineUp={fixtureData?.lineup?.[0]?.substitutes ?? []}
+                awayLineUp={fixtureData?.lineup?.[1]?.substitutes ?? []}
                 homeName={fixtureData?.kor_homename}
                 awayName={fixtureData?.kor_awayname}
                 korLineUp={{

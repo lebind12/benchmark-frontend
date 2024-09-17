@@ -3,21 +3,17 @@ import { Image } from '@nextui-org/react';
 
 type TeamNameComponentProps = {
   name: string;
-  url: string;
-  color: string;
+  team_id: string;
 };
 
-const TeamNameComponent = ({
-  src = 'https://media.api-sports.io/football/teams/33.png',
-  team_id = '39',
-  name = 'TEST',
-}) => {
+const TeamNameComponent = ({ team_id, name }: TeamNameComponentProps) => {
   return (
     <div className="flex flex-col justify-center items-center w-full h-full">
       <Image
         src={'https://media.api-sports.io/football/teams/' + team_id + '.png'}
         width={48}
         height={48}
+        className="w-fit h-full"
       ></Image>
       <span className="text-pretty text-center text-sm">{name}</span>
     </div>

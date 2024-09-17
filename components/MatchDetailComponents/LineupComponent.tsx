@@ -10,7 +10,7 @@ type playerType = {
   };
 };
 
-type korLineupType = {
+type LineupType = {
   [key: string]: string;
 };
 
@@ -22,8 +22,8 @@ type LineupComponentProps = {
   homeName: string | undefined;
   awayName: string | undefined;
   korLineUp: {
-    homeLineUp: korLineupType | undefined;
-    awayLineUp: korLineupType | undefined;
+    homeLineUp: LineupType | undefined;
+    awayLineUp: LineupType | undefined;
   };
   status: string | undefined;
 };
@@ -52,13 +52,10 @@ const LineupComponent = ({
             </div>
           </div>
           <Separator />
-          <div className="flex w-full h-full justify-evenly text-xl">
+          <div className="flex w-full h-full justify-evenly text-xl font-['MangoDdobak-B']">
             <div className="flex flex-col w-full justify-center items-center p-4">
               {homeLineUp?.map((player) => (
-                <span
-                  className="grid grid-cols-2 w-full h-full"
-                  key={player.player.id}
-                >
+                <span className="flex w-full h-full" key={player.player.id}>
                   <span className="flex w-1/3 justify-center">
                     {player.player.number}
                   </span>
@@ -72,10 +69,7 @@ const LineupComponent = ({
             </div>
             <div className="flex flex-col w-full justify-center items-center p-4">
               {awayLineUp?.map((player) => (
-                <span
-                  className="grid grid-cols-2 w-full h-full"
-                  key={player.player.id}
-                >
+                <span className="flex w-full h-full" key={player.player.id}>
                   <span className="flex w-1/3 justify-center">
                     {player.player.number}
                   </span>
