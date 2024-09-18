@@ -71,13 +71,21 @@ const TimeLineComponent = ({
         teamName = generateName(event, homeName, awayName) ?? '';
         eventTitle = '교체';
         if (event.team.id == HomeId) {
-          playerInfo = `${korLineUp.homeLineUp?.[event.player.id]} -> ${
+          playerInfo = `${
+            !!!korLineUp.homeLineUp?.[event.player.id]
+              ? event.player.name
+              : korLineUp.homeLineUp?.[event.player.id]
+          } -> ${
             event.assist?.id
               ? korLineUp.homeLineUp?.[event.assist.id] ?? event.assist?.name
               : event.assist?.name
           }`;
         } else {
-          playerInfo = `${korLineUp.awayLineUp?.[event.player.id]} -> ${
+          playerInfo = `${
+            !!!korLineUp.awayLineUp?.[event.player.id]
+              ? event.player.name
+              : korLineUp.awayLineUp?.[event.player.id]
+          } -> ${
             event.assist?.id
               ? korLineUp.awayLineUp?.[event.assist.id] ?? event.assist?.name
               : event.assist?.name
@@ -99,12 +107,14 @@ const TimeLineComponent = ({
     if (event.team.id == HomeId)
       return (
         <div className="flex flex-col">
-          <span key={key} className="w-full text-start text-xl">
+          <span key={key} className="w-full text-start text-lg">
             {event.time.elapsed}분 {teamName} {eventTitle}
           </span>
-          <span className="w-full text-start">
+          <span className="w-full text-start mt-[-5px]">
             {event.type === 'subst'
               ? playerInfo
+              : !!!korLineUp.homeLineUp?.[event.player.id]
+              ? event.player.name
               : korLineUp.homeLineUp?.[event.player.id]}
           </span>
         </div>
@@ -112,10 +122,10 @@ const TimeLineComponent = ({
     else
       return (
         <div className="flex flex-col">
-          <span key={key} className="w-full text-end text-xl">
+          <span key={key} className="w-full text-end text-lg">
             {event.time.elapsed}분 {teamName} {eventTitle}
           </span>
-          <span className="w-full text-end">
+          <span className="w-full text-end mt-[-5px]">
             {event.type === 'subst'
               ? playerInfo
               : korLineUp.awayLineUp?.[event.player.id]}
@@ -125,7 +135,7 @@ const TimeLineComponent = ({
   };
 
   return (
-    <div className="flex flex-col w-full h-full bg-primary-50 text-2xl rounded-xl font-['ONE-Mobile-POP']">
+    <div className="flex flex-col w-full h-full bg-primary-50">
       <div className="flex w-full h-fit p-4 justify-evenly">
         <Image
           src={'https://media.api-sports.io/football/teams/' + HomeId + '.png'}
@@ -144,7 +154,7 @@ const TimeLineComponent = ({
         />
       </div>
       <Separator></Separator>
-      <div className="flex flex-col w-full h-full justify-center text-sm font-['MangoDdobak-B'] font-light p-4">
+      <div className="flex flex-col w-full h-full justify-center text-sm font-['S-CoreDream-3Light'] font-thin p-4 gap-4">
         {eventData?.map((item, key) => makeTimelineData(item, key))}
       </div>
     </div>

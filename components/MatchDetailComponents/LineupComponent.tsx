@@ -52,8 +52,8 @@ const LineupComponent = ({
             </div>
           </div>
           <Separator />
-          <div className="flex w-full h-full justify-evenly text-xl font-['MangoDdobak-B']">
-            <div className="flex flex-col w-full justify-center items-center p-4">
+          <div className="flex w-full h-full justify-evenly text-lg font-['S-CoreDream-3Light']">
+            <div className="flex flex-col w-full justify-center items-center p-4 gap-2">
               {homeLineUp?.map((player) => (
                 <span className="flex w-full h-full" key={player.player.id}>
                   <span className="flex w-1/3 justify-center">
@@ -84,7 +84,7 @@ const LineupComponent = ({
           </div>
         </div>
       ) : (
-        <div className="flex flex-col w-full h-full bg-primary-50 text-2xl rounded-xl font-['ONE-Mobile-POP'] p-4 gap-2">
+        <div className="flex flex-col w-full h-full bg-primary-50 text-2xl rounded-xl p-4 gap-2">
           <div className="flex w-full justify-evenly">
             <div className="flex w-full justify-center">
               <span>{homeName}</span>

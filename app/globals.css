@@ -3,6 +3,21 @@
 @tailwind utilities;
 
 @font-face {
+  font-family: 'S-CoreDream-3Light';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NanumGothic';
+  src: url('http://fonts.googleapis.com/earlyaccess/nanumgothic.css');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'TAEBAEKfont';
   src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2310@1.0/TAEBAEKfont.woff2')
     format('woff2');
