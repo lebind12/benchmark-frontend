@@ -6,7 +6,11 @@ import TeamStatisticsComponent from '@/components/TeamStatComponents/TeamStatist
 import { Metadata } from 'next';
 import Image from 'next/image';
 
-export default function Home(params: { league: string; teamid: string }) {
+export default function Home({
+  params,
+}: {
+  params: { league: string; teamid: string };
+}) {
   // TODO
   // FOTMOB 참조
   // 팀 개요
