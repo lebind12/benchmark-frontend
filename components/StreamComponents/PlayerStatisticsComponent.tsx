@@ -15,7 +15,7 @@ type playerObjectType = {
     captain: false;
     minutes: null;
     number: 5;
-    position: 'D';
+    position: 'D' | 'F' | 'M' | 'G';
     rating: null;
     substitute: true;
   };

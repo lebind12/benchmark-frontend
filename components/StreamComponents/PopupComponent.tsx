@@ -115,7 +115,7 @@ const PopupComponent = () => {
       setPopupState(false);
       setUsers([]);
     }, 90 * 1000);
-  }, 10 * 60 * 1000);
+  }, 10 * 60 * 1000000);
 
   return (
     <div className="flex w-1/4 h-full items-center p-4">
