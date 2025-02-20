@@ -86,7 +86,7 @@ const PopupComponent = () => {
   };
 
   useEffect(() => {
-    handleConnect();
+    // handleConnect();
   }, []);
 
   const handleConnect = () => {
