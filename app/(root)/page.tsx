@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { benchmarkAPI } from '@/apis/backend';
 import Image from 'next/image';
 import Link from 'next/link';
+import LoadingImage from '@/public/assets/eaglekop.png';
 
 // 리그 정보 타입 정의
 type LeagueInfo = {
@@ -112,9 +113,16 @@ export default function Home() {
       <DatePickPage league="" dateString={getDateString(new Date())} />
 
       {isLoading ? (
-        <div className="flex w-full h-full justify-center items-center py-8">
-          <span className="text-xl text-black">
-            경기 일정을 불러오는 중입니다...
+        <div className="flex flex-col w-full h-full justify-center items-center py-8">
+          <Image
+            src={LoadingImage}
+            alt={''}
+            width={200}
+            height={200}
+            className="opacity-50"
+          />
+          <span className="font-bold text-2xl mt-4">
+            경기를 불러오는 중입니다...
           </span>
         </div>
       ) : (
@@ -125,7 +133,7 @@ export default function Home() {
 
             return (
               <div key={league.name} className="flex flex-col w-full">
-                <h2 className="text-2xl font-['ONE-Mobile-POP'] mb-2 px-4">
+                <h2 className="text-2xl font-['ONE-Mobile-POP'] mb-2 px-4 text-white">
                   {league.korName}
                 </h2>
                 <div className="flex flex-col w-full gap-2">
@@ -185,8 +193,17 @@ export default function Home() {
           {Object.values(fixturesByLeague).every(
             (fixtures) => fixtures.length === 0,
           ) && (
-            <div className="flex w-full h-full justify-center items-center text-3xl py-8 text-black">
-              <span>오늘 예정된 경기가 없습니다</span>
+            <div className="flex flex-col w-full h-full justify-center items-center py-8">
+              <Image
+                src={LoadingImage}
+                alt={''}
+                width={360}
+                height={360}
+                className="opacity-50"
+              />
+              <span className="font-bold text-2xl text-black">
+                오늘 예정된 경기가 없습니다
+              </span>
             </div>
           )}
         </div>
